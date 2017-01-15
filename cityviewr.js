@@ -2,6 +2,8 @@ var mapEl = document.querySelector('a-map');
 var currentLocationEl = document.querySelector('#current-location');
 var setProperty = window.AFRAME.utils.entity.setComponentProperty;
 
+
+
 // add bar which will show data by height and color
 function addMarker(position, isFirst) {
     var marker = document.createElement('a-entity');
@@ -37,18 +39,7 @@ function addVarButton(vartext, classname, id, count) {
     var posx = -3;
     var cnt = count;
     console.log(cnt);
-    if (classname == 'CBScatvar' && count < 10) {
-        posx = 0;
-        button.setAttribute('visible', false);
-    } else if (classname == 'CBScatvar' && count < 20) {
-        posx = 2;
-        cnt = count - (Math.floor(count / 10) * 10);
-        button.setAttribute('visible', false);
-    } else if (classname == 'CBScatvar') {
-        posx = 4;
-        cnt = count - (Math.floor(count / 10) * 10);
-        button.setAttribute('visible', false);
-    }
+
     var posy = 4 - (cnt / 4);
     var position = posx + " " + posy + " -3.9";
     button.setAttribute('position', position);
@@ -73,37 +64,36 @@ function addVarButton(vartext, classname, id, count) {
 
 function get_CBS_varnames() {
     //Get data from CBS Open Data
-    //It's a long list, so we first get the categories
-    //and fill them with variables.
-    //Then add each cat with vars in CBSvarCache
-    var count = 0;
+    //Creating a menu array of dicts, containing
+    //id: level, title, key, type, items (childitems)
+    //With this array build a menu
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             console.log(JSON.parse(xhr.responseText));
             variables = JSON.parse(xhr.responseText).value;
-            //get the toplevel categories with ParentID is null
-            for (var v = 0; v < variables.length; v++) {
-                if (variables[v]['ParentID'] == null) {
-                    if (variables[v]['Title'] != 'Wijken en buurten' && variables[v]['Title'] != 'Regioaanduiding') {
-                        if (count > 12) {
-                            count = 0;
-                        }
-                        CBSvar = {};
-                        CBSvar.id = variables[v]['ID'];
-                        CBSvar.text = variables[v]['Title'];
-                        CBSvar.button = addVarButton(CBSvar.text, 'CBStopcat', CBSvar.id, count);
-                        IsSelected[CBSvar.id] = false;
-                        //	CBSvarCache[CBSvar.id] = CBSvar;
-                        //choice.innerHTML += '<input type="checkbox" name="variable[]" value="' + variables[v]['Key'] + '"/> ' + variables[v]['Title']  + '<br/>';
-                        count++;
-                    }
-                }
+            console.log(variables);
+            menuData = variables.reduce(function(map, node) {
+                map.i[node.ID] = node;
+                node.children = [];
+                node.ParentID === null ?
+                    map.result.push(node) :
+                    map.i[node.ParentID].children.push(node);
+                return map;
+            }, {
+                i: {},
+                result: []
+            }).result;
+            menuLookup = {};
+            for (var i = 0, len = menuData.length; i < len; i++) {
+                menuLookup[menuData[i].ID] = menuData[i];
             }
-            var panelNr = 1;
-            var ypos = 0;
-            //console.log(CBSvarCache);
+            for (var i = 0; i < menuData.length; i++) {
+                button = addVarButton(menuData[i].Title, 'CBStopcat', menuData[i].ID, i);
+            }
+
         }
+
     }
     xhr.open('GET', 'http://opendata.cbs.nl/ODataApi/odata/83487NED/DataProperties', true);
     xhr.send(null);
@@ -187,7 +177,8 @@ function create_extra_markers(position) {
 
 //------------START------------------------------------------------------------
 
-get_CBS_varnames();
+var menu = get_CBS_varnames();
+
 //get_CBS_varnames_local();
 
 // Once the map is loaded

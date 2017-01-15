@@ -1,114 +1,105 @@
 <html>
-  <head>
+
+<head>
     <title>CityViewR</title>
-	<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <script src="js/aframe-map.js"></script>
-	<script src="js/aframe-bmfont-text-component.js"></script>
-		<script src="js/aframe-layout-component.min.js"></script>
-		<script src="js/aframe-draw-component.min.js"></script>
-		<script src="js/aframe-textwrap-component.min.js"></script>
-		
-	<script>
-	var venueCache = {};
-	  var districtCache = {};
-	  var CBSvarCache = {};
-	  var IsSelected = {};
-	  var variables = [];
+    <script src="js/aframe-bmfont-text-component.js"></script>
+    <script src="js/aframe-layout-component.min.js"></script>
+    <script src="js/aframe-draw-component.min.js"></script>
+    <script src="js/aframe-textwrap-component.min.js"></script>
 
-AFRAME.registerComponent('submenu', {
-  schema: {default: ''},
-  init() {
-	this.el.setAttribute('transparent',true);
-	this.el.setAttribute('opacity',0.2);
-	this.el.setAttribute('selected',false);
-    this.el.addEventListener('click', () => {
-		var submenupanels = document.querySelectorAll(".CBScatvar");
-		for (var i = 0; i < submenupanels.length; i++){
-			submenupanels[i].setAttribute('visible',false);
-			}
-		var topmenupanels = document.querySelectorAll(".topmenupanel");
-		for (var i = 0; i < topmenupanels.length; i++){
-			topmenupanels[i].setAttribute('opacity',0.2);
-			}
-		this.el.setAttribute('opacity', 0.5);
-		var subitems = [];
-		for (var v = 0; v < variables.length; v++){
-			if (variables[v]['ParentID'] == this.data){
-				subitems.push(variables[v]);
-			}
-		}
-		for (var i = 0; i < subitems.length; i++){
-			var submenutext = document.getElementById('CBScatvar' + i);
-			var str = 'color:white'.concat('; text: ', subitems[i]['Title'].replace(';', '-'), ';');
-			submenutext.setAttribute('bmfont-text', str);
-			submenutext.setAttribute('visible', true);
-			var submenupanel = document.getElementById('submenupanel' + i);
-			submenupanel.setAttribute('submenu', subitems[i]['ID']);
-			if (subitems[i]['Type'] == 'Topic'){
-				submenupanel.setAttribute('opacity',0);
-			} else {
-				submenupanel.setAttribute('opacity',0.2);
-			}
-			submenupanel.setAttribute('visible', true);
-		}
-    });
-	
-	
-  }
-});
-
-AFRAME.registerComponent('bar', {
-  schema: {default: ''},
-  init() {
-	this.el.setAttribute('transparent',true);
-	this.el.setAttribute('opacity',0.6);
-	this.el.setAttribute('selected',false);
-
-    this.el.addEventListener('click', () => {
-	  for (var v = 0; v < variables.length; v++){
-				if (variables[v]['ParentID'] == this.data){
-					console.log(variables[v]['Title']);
-				}
-			}
-    });
-  }
-});
+    <script>
+        var venueCache = {};
+        var districtCache = {};
+        var CBSvarCache = {};
+        var IsSelected = {};
+        var variables = [];
+        var menuData = [];
+        var menuLookup = {};
 
 
-</script>
-  </head>
-  <body>
+        function find(array, id) {
+            if (typeof array != 'undefined') {
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i].id == id) return [id];
+                    var a = find(array[i].sub, id);
+                    if (a != null) {
+                        a.unshift(array[i].id);
+                        return a;
+                    }
+                }
+            }
+            return null;
+        }
+        AFRAME.registerComponent('submenu', {
+            schema: {
+                default: ''
+            },
+            init() {
+                this.el.setAttribute('transparent', true);
+                this.el.setAttribute('opacity', 0.2);
+                this.el.setAttribute('selected', false);
+
+                this.el.addEventListener('click', () => {
+                    var menuItem = menuLookup[this.data];
+                    console.log(menuItem);
+                    var parents = find(menuData, this.data);
+                    console.log(parents);
+                });
+
+
+            }
+        });
+
+        AFRAME.registerComponent('bar', {
+            schema: {
+                default: ''
+            },
+            init() {
+                this.el.setAttribute('transparent', true);
+                this.el.setAttribute('opacity', 0.6);
+                this.el.setAttribute('selected', false);
+
+                this.el.addEventListener('click', () => {
+                    for (var v = 0; v < variables.length; v++) {
+                        if (variables[v]['ParentID'] == this.data) {
+                            console.log(variables[v]['Title']);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+
+<body>
     <a-scene id="scene">
 
-      <a-map
-        width="7"
-        height="4"
-        position="0 0 -2"
-        rotation="-90 0 0"
-      >
-        <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.05"></a-sphere>
-      </a-map>
-	  <a-plane id="selection_panel" color="gray" position="0 2 -4" width="7" height="4" visible="false" data-interactive="true" >
-	  </a-plane>
-	<a-plane id="menupanel0" color="lightblue" position="4 3 -5" width="2" height="4" visible="false" transparent="true" opacity="0.1" rotation="0 -33 0 "></a-plane>
-	<a-plane id="menupanel1" toggle-menu='hello' color="lightblue" position="5 3 -2.5" width="2" height="4" visible="false" transparent="true" opacity="0.8" rotation="0 -90 0 ">
-	  </a-plane>
-	  
-	  <a-plane id="menupanel2" color="lightblue" position="5 3 0.5" width="2" height="4" visible="false" transparent="true" opacity="0.1" rotation="0 -90 0 ">
-	  </a-plane>
-	  <!-- Red directional light shining from the top left. -->
-<a-light color="red" position="-1 5 0"></a-light>
+        <a-map width="7" height="4" position="0 0 -2" rotation="-90 0 0">
+            <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.05"></a-sphere>
+        </a-map>
+        <a-plane id="selection_panel" color="gray" position="0 2 -4" width="7" height="4" visible="false" data-interactive="true">
+        </a-plane>
+        <a-plane id="menupanel0" color="lightblue" position="4 3 -5" width="2" height="4" visible="false" transparent="true" opacity="0.1" rotation="0 -33 0 "></a-plane>
+        <a-plane id="menupanel1" toggle-menu='hello' color="lightblue" position="5 3 -2.5" width="2" height="4" visible="false" transparent="true" opacity="0.8" rotation="0 -90 0 ">
+        </a-plane>
 
-<!-- Blue point light, 5 meters in the air. -->
-<a-light type="point" color="blue" position="0 5 0"></a-light>
+        <a-plane id="menupanel2" color="lightblue" position="5 3 0.5" width="2" height="4" visible="false" transparent="true" opacity="0.1" rotation="0 -90 0 ">
+        </a-plane>
+        <!-- Red directional light shining from the top left. -->
+        <a-light color="red" position="-1 5 0"></a-light>
 
-<!-- Green point light, 2 meters in the air. -->
-<a-light type="point" color="lightblue" position="0 2 0" intensity="1"></a-light>
+        <!-- Blue point light, 5 meters in the air. -->
+        <a-light type="point" color="blue" position="0 5 0"></a-light>
+
+        <!-- Green point light, 2 meters in the air. -->
+        <a-light type="point" color="lightblue" position="0 2 0" intensity="1"></a-light>
 
 
-<!-- Dim ambient lighting. -->
-<a-light type="ambient" color="#222" intensity="1"></a-light>
-	<!--
+        <!-- Dim ambient lighting. -->
+        <a-light type="ambient" color="#222" intensity="1"></a-light>
+        <!--
 	   <a-entity position="-3 3.5 -3.9" scale="1 1 1" class="main_menu" id="CBS"
                 bmfont-text="color: white; text: CBS data;">
       </a-entity>
@@ -116,28 +107,28 @@ AFRAME.registerComponent('bar', {
                 bmfont-text="color: white; text: Other data;">
       </a-entity>
 	  -->
-      <a-sky color='black' ></a-sky>
+        <a-sky color='black'></a-sky>
 
-      <a-entity position="0 0.4 1">
-        <a-camera look-controls wasd-controls>
-			<a-cursor color="#4CC3D9" fuse="true" timeout="250"></a-cursor>
-		</a-camera>
-      </a-entity>
-	  
+        <a-entity position="0 0.4 1">
+            <a-camera look-controls wasd-controls>
+                <a-cursor color="#4CC3D9" fuse="true" timeout="250"></a-cursor>
+            </a-camera>
+        </a-entity>
+
     </a-scene>
-	<script src="js/loadJSON.js"></script>
-  <script src="js/TweenMax.min.js"></script>
-  <script src="js/chroma.min.js"></script>
-  <script src="js/geturlparameters.js"></script>
-  <script src="js/geojson-vt.js"></script>
-<script src="https://npmcdn.com/@turf/turf@3.5.1/turf.min.js" charset="utf-8"></script>
-	<script src="style.js"></script>
-	<!--
+    <script src="js/loadJSON.js"></script>
+    <script src="js/TweenMax.min.js"></script>
+    <script src="js/chroma.min.js"></script>
+    <script src="js/geturlparameters.js"></script>
+    <script src="js/geojson-vt.js"></script>
+    <script src="https://npmcdn.com/@turf/turf@3.5.1/turf.min.js" charset="utf-8"></script>
+    <script src="style.js"></script>
+    <!--
 	<script src="https://rawgit.com/ngokevin/aframe-animation-component/master/dist/aframe-animation-component.min.js"></script> 
   <script src="https://rawgit.com/gmarty/aframe-ui-components/master/dist/aframe-ui-components.min.js"></script> 
 -->
-	<script src="cityviewr.js"></script>
-	<!--
+    <script src="cityviewr.js"></script>
+    <!--
     <script>
       var mapEl = document.querySelector('a-map');
       var currentLocationEl = document.querySelector('#current-location');
@@ -170,8 +161,8 @@ AFRAME.registerComponent('bar', {
       // Whenever we have a new location, add new markers,
       // and update all markers positions.
       // If a marker is off the map, hide it
-	  
-	  
+
+
 function onLocationUpdate(lat, long, width, height) {
 
         var halfWidth = width / 2;
@@ -180,7 +171,7 @@ function onLocationUpdate(lat, long, width, height) {
         // foursquare's free venues API
         loadJSON('geojson/WK_GM0363.geojson', function(response) {
         response = {"type" : "FeatureCollection", "features" : JSON.parse(response)};
-		
+
 		for (var i = 0; i < response['features'].length; i++){
 			var district = {};
 			district.center = turf.center(response['features'][i]['geometry']);
@@ -212,8 +203,8 @@ function onLocationUpdate(lat, long, width, height) {
       });
 
       }
-	  
-	  
+
+
       function onSelectionUpdate(lat, long, width, height) {
 
         var halfWidth = width / 2;
@@ -274,10 +265,11 @@ function onLocationUpdate(lat, long, width, height) {
 
           onLocationUpdate(lat, long, geomData.width, geomData.height);
 
-       
+
       });
 
 
     </script>-->
-  </body>
+</body>
+
 </html>
