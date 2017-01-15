@@ -1,0 +1,283 @@
+<html>
+  <head>
+    <title>CityViewR</title>
+	<meta charset="UTF-8">
+    <script src="js/aframe-map.js"></script>
+	<script src="js/aframe-bmfont-text-component.js"></script>
+		<script src="js/aframe-layout-component.min.js"></script>
+		<script src="js/aframe-draw-component.min.js"></script>
+		<script src="js/aframe-textwrap-component.min.js"></script>
+		
+	<script>
+	var venueCache = {};
+	  var districtCache = {};
+	  var CBSvarCache = {};
+	  var IsSelected = {};
+	  var variables = [];
+
+AFRAME.registerComponent('submenu', {
+  schema: {default: ''},
+  init() {
+	this.el.setAttribute('transparent',true);
+	this.el.setAttribute('opacity',0.2);
+	this.el.setAttribute('selected',false);
+    this.el.addEventListener('click', () => {
+		var submenupanels = document.querySelectorAll(".CBScatvar");
+		for (var i = 0; i < submenupanels.length; i++){
+			submenupanels[i].setAttribute('visible',false);
+			}
+		var topmenupanels = document.querySelectorAll(".topmenupanel");
+		for (var i = 0; i < topmenupanels.length; i++){
+			topmenupanels[i].setAttribute('opacity',0.2);
+			}
+		this.el.setAttribute('opacity', 0.5);
+		var subitems = [];
+		for (var v = 0; v < variables.length; v++){
+			if (variables[v]['ParentID'] == this.data){
+				subitems.push(variables[v]);
+			}
+		}
+		for (var i = 0; i < subitems.length; i++){
+			var submenutext = document.getElementById('CBScatvar' + i);
+			var str = 'color:white'.concat('; text: ', subitems[i]['Title'].replace(';', '-'), ';');
+			submenutext.setAttribute('bmfont-text', str);
+			submenutext.setAttribute('visible', true);
+			var submenupanel = document.getElementById('submenupanel' + i);
+			submenupanel.setAttribute('submenu', subitems[i]['ID']);
+			if (subitems[i]['Type'] == 'Topic'){
+				submenupanel.setAttribute('opacity',0);
+			} else {
+				submenupanel.setAttribute('opacity',0.2);
+			}
+			submenupanel.setAttribute('visible', true);
+		}
+    });
+	
+	
+  }
+});
+
+AFRAME.registerComponent('bar', {
+  schema: {default: ''},
+  init() {
+	this.el.setAttribute('transparent',true);
+	this.el.setAttribute('opacity',0.6);
+	this.el.setAttribute('selected',false);
+
+    this.el.addEventListener('click', () => {
+	  for (var v = 0; v < variables.length; v++){
+				if (variables[v]['ParentID'] == this.data){
+					console.log(variables[v]['Title']);
+				}
+			}
+    });
+  }
+});
+
+
+</script>
+  </head>
+  <body>
+    <a-scene id="scene">
+
+      <a-map
+        width="7"
+        height="4"
+        position="0 0 -2"
+        rotation="-90 0 0"
+      >
+        <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.05"></a-sphere>
+      </a-map>
+	  <a-plane id="selection_panel" color="gray" position="0 2 -4" width="7" height="4" visible="false" data-interactive="true" >
+	  </a-plane>
+	<a-plane id="menupanel0" color="lightblue" position="4 3 -5" width="2" height="4" visible="false" transparent="true" opacity="0.1" rotation="0 -33 0 "></a-plane>
+	<a-plane id="menupanel1" toggle-menu='hello' color="lightblue" position="5 3 -2.5" width="2" height="4" visible="false" transparent="true" opacity="0.8" rotation="0 -90 0 ">
+	  </a-plane>
+	  
+	  <a-plane id="menupanel2" color="lightblue" position="5 3 0.5" width="2" height="4" visible="false" transparent="true" opacity="0.1" rotation="0 -90 0 ">
+	  </a-plane>
+	  <!-- Red directional light shining from the top left. -->
+<a-light color="red" position="-1 5 0"></a-light>
+
+<!-- Blue point light, 5 meters in the air. -->
+<a-light type="point" color="blue" position="0 5 0"></a-light>
+
+<!-- Green point light, 2 meters in the air. -->
+<a-light type="point" color="lightblue" position="0 2 0" intensity="1"></a-light>
+
+
+<!-- Dim ambient lighting. -->
+<a-light type="ambient" color="#222" intensity="1"></a-light>
+	<!--
+	   <a-entity position="-3 3.5 -3.9" scale="1 1 1" class="main_menu" id="CBS"
+                bmfont-text="color: white; text: CBS data;">
+      </a-entity>
+	  <a-entity position="-1 3.5 -3.9" scale="1 1 1" class="main_menu" id="Other"
+                bmfont-text="color: white; text: Other data;">
+      </a-entity>
+	  -->
+      <a-sky color='black' ></a-sky>
+
+      <a-entity position="0 0.4 1">
+        <a-camera look-controls wasd-controls>
+			<a-cursor color="#4CC3D9" fuse="true" timeout="250"></a-cursor>
+		</a-camera>
+      </a-entity>
+	  
+    </a-scene>
+	<script src="js/loadJSON.js"></script>
+  <script src="js/TweenMax.min.js"></script>
+  <script src="js/chroma.min.js"></script>
+  <script src="js/geturlparameters.js"></script>
+  <script src="js/geojson-vt.js"></script>
+<script src="https://npmcdn.com/@turf/turf@3.5.1/turf.min.js" charset="utf-8"></script>
+	<script src="style.js"></script>
+	<!--
+	<script src="https://rawgit.com/ngokevin/aframe-animation-component/master/dist/aframe-animation-component.min.js"></script> 
+  <script src="https://rawgit.com/gmarty/aframe-ui-components/master/dist/aframe-ui-components.min.js"></script> 
+-->
+	<script src="cityviewr.js"></script>
+	<!--
+    <script>
+      var mapEl = document.querySelector('a-map');
+      var currentLocationEl = document.querySelector('#current-location');
+      var setProperty = window.AFRAME.utils.entity.setComponentProperty;
+      var venueCache = {};
+	  var districtCache = {};
+
+      // Creating an inverted cone and adding it to the scene as a place marker
+      function addMarker() {
+
+        var marker = document.createElement('a-entity');
+        var point = document.createElement('a-box');
+
+        point.setAttribute('height', 0.3);
+        point.setAttribute('width', 0.01);
+		point.setAttribute('depth', 0.01);
+        //point.setAttribute('opacity', 0.8);
+        point.setAttribute('rotation', {x: 90, y: 0, z: 0});
+        point.setAttribute('position', {x: 0, y: 0, z: 0.15});
+        point.setAttribute('color', '#f00');
+
+        marker.appendChild(point);
+
+        mapEl.appendChild(marker);
+
+        return marker;
+
+      }
+
+      // Whenever we have a new location, add new markers,
+      // and update all markers positions.
+      // If a marker is off the map, hide it
+	  
+	  
+function onLocationUpdate(lat, long, width, height) {
+
+        var halfWidth = width / 2;
+        var halfHeight = height / 2;
+
+        // foursquare's free venues API
+        loadJSON('geojson/WK_GM0363.geojson', function(response) {
+        response = {"type" : "FeatureCollection", "features" : JSON.parse(response)};
+		
+		for (var i = 0; i < response['features'].length; i++){
+			var district = {};
+			district.center = turf.center(response['features'][i]['geometry']);
+			district.long = district.center['geometry']['coordinates'][0];
+			district.lat = district.center['geometry']['coordinates'][1];
+			district.id = response['features'][i]['properties']['WK_CODE'];
+			district.marker = addMarker();
+			districtCache[district.id] = district;
+			}
+				  //console.log(districtCache);
+	  Object.keys(districtCache).forEach(markerId => {
+              var district = districtCache[markerId];
+              var position = mapEl.components.map.project(district.long, district.lat);
+				//console.log(position);
+              if (
+                position.x > halfWidth
+                || position.x < -halfWidth
+                || position.y > halfHeight
+                || position.y < -halfHeight
+              ) {
+                setProperty(district.marker, 'visible', false);
+              } else {
+                setProperty(district.marker, 'visible', true);
+              }
+
+              setProperty(district.marker, 'position', position);
+			  //console.log('hoera');
+            });
+      });
+
+      }
+	  
+	  
+      function onSelectionUpdate(lat, long, width, height) {
+
+        var halfWidth = width / 2;
+        var halfHeight = height / 2;
+
+        // foursquare's free venues API
+        fetch(`https://api.foursquare.com/v2/venues/explore?client_id=MWVIR52CTGVY0GZGFJB53UEUJRGJETB3SQI4KY1JWAEA1GIO&client_secret=TME3XHDYNTXQX0MMF3AME2TYW1F4KY5QUOI4RL5AP1P0GGXR&v=20161018&m=foursquare&ll=${lat},${long}&section=topPicks&time=any&day=any`)
+          .then(res => res.json())
+          .then(res => {
+            res.response.groups[0].items.map(({venue}) => ({
+              id: venue.id,
+              lat: venue.location.lat,
+              long: venue.location.lng,
+            }))
+            .filter(({id}) => !venueCache[id])
+            .forEach(venue => {
+              venue.marker = addMarker();
+              venueCache[venue.id] = venue;
+            });
+
+            Object.keys(venueCache).forEach(markerId => {
+              var venue = venueCache[markerId];
+              var position = mapEl.components.map.project(venue.long, venue.lat);
+
+              if (
+                position.x > halfWidth
+                || position.x < -halfWidth
+                || position.y > halfHeight
+                || position.y < -halfHeight
+              ) {
+                setProperty(venue.marker, 'visible', false);
+              } else {
+                setProperty(venue.marker, 'visible', true);
+              }
+
+              setProperty(venue.marker, 'position', position);
+            });
+          });
+      }
+
+      // Once the map is loaded
+      mapEl.addEventListener('map-loaded', function() {
+		mapEl.setAttribute('map', 'style', JSON.stringify(style));
+        var geomData = mapEl.components.geometry.data;
+
+          var long = 4.895168;
+          var lat = 52.370216;
+
+          // center the map on that location
+          setProperty(mapEl, 'map.center', long + ' ' + lat);
+
+          // and zoom in: 20 is very zoomed in, 0 is really zoomed out
+          setProperty(mapEl, 'map.zoom', '10');
+
+          // Place the marker in the correct position
+          setProperty(currentLocationEl, 'position', mapEl.components.map.project(long, lat));
+          setProperty(currentLocationEl, 'visible', true);
+
+          onLocationUpdate(lat, long, geomData.width, geomData.height);
+
+       
+      });
+
+
+    </script>-->
+  </body>
+</html>
