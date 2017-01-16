@@ -22,16 +22,18 @@
         function find(array, id) {
             if (typeof array != 'undefined') {
                 for (var i = 0; i < array.length; i++) {
-                    if (array[i].id == id) return [id];
-                    var a = find(array[i].sub, id);
+                    if (array[i].ID == id) return [id];
+                    var a = find(array[i].children, id);
                     if (a != null) {
-                        a.unshift(array[i].id);
+                        a.unshift(array[i].ID);
                         return a;
                     }
                 }
             }
             return null;
         }
+
+
         AFRAME.registerComponent('submenu', {
             schema: {
                 default: ''
@@ -40,12 +42,45 @@
                 this.el.setAttribute('transparent', true);
                 this.el.setAttribute('opacity', 0.2);
                 this.el.setAttribute('selected', false);
-
                 this.el.addEventListener('click', () => {
+                    var menuButtons = document.getElementsByClassName('menubutton');
+                    for (var i = 0; i < menuButtons.length; i++) {
+                        menuButtons[i].setAttribute('visible', false);
+                    }
                     var menuItem = menuLookup[this.data];
-                    console.log(menuItem);
                     var parents = find(menuData, this.data);
                     console.log(parents);
+                    if (parents == null) {
+                        fillMenuButton(menuItem.Title, menuItem.ID, 0, menuItem.Type);
+                        var childItems = menuItem.children;
+                        for (var i = 0; i < childItems.length; i++) {
+                            var j = i + 1;
+                            fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type);
+                        }
+                    } else {
+                        var level = parents.length;
+                        for (var i = 0; i < parents.length; i++) {
+                            var item = menuLookup[parents[i]];
+                            console.log(item);
+                            fillMenuButton(item.Title, item.ID, i, item.Type);
+                        }
+                        var childItems = menuItem.children;
+                        for (var i = 0; i < childItems.length; i++) {
+                            var j = i + level;
+                            fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type);
+                        }
+                    }
+                    //if (parents != null){
+                    //var level = parents.length;
+                    //for (var i=0;i<level;i++){
+                    //var parentText = menuLookup(parents[i].Title);
+                    //console.log(parentText);
+                    //}
+
+                    //}
+                    //var str = 'color:white'.concat('; text: ', vartext, ';');
+                    //button.setAttribute('bmfont-text', str);
+
                 });
 
 

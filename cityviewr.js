@@ -2,10 +2,19 @@ var mapEl = document.querySelector('a-map');
 var currentLocationEl = document.querySelector('#current-location');
 var setProperty = window.AFRAME.utils.entity.setComponentProperty;
 
+//helper function to find index of item in array
+function findWithAttr(array, attr, value) {
+    for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 
 // add bar which will show data by height and color
-function addMarker(position, isFirst) {
+function addMarker(position, id) {
     var marker = document.createElement('a-entity');
     var point = document.createElement('a-box');
     point.setAttribute('height', 0.3);
@@ -19,20 +28,34 @@ function addMarker(position, isFirst) {
     point.setAttribute('position', position);
     point.setAttribute('color', 'lime');
     point.setAttribute('class', 'bar');
-    point.setAttribute('bar', 'wijkid');
-    point.setAttribute('isFirst', true);
+    point.setAttribute('bar', id + 0);
     marker.appendChild(point);
     mapEl.appendChild(marker);
     return marker;
 }
+
+function fillMenuButton(vartext, id, number, type) {
+    var buttontext = document.getElementById('menutext' + number);
+    var str = 'color:white'.concat('; text: ', vartext, ';');
+    buttontext.setAttribute('bmfont-text', str);
+    buttontext.setAttribute('visible', true);
+    var buttonpanel = document.getElementById('menupanel' + number);
+    buttonpanel.setAttribute('submenu', id);
+    if (type == 'TopicGroup') {
+        buttonpanel.setAttribute('opacity', .2);
+    } else {
+        buttonpanel.setAttribute('opacity', 0);
+    }
+}
+
 
 function addVarButton(vartext, classname, id, count) {
     var scene = document.getElementById('scene');
     var button = document.createElement('a-entity');
     var str = 'color:white'.concat('; text: ', vartext, ';');
     button.setAttribute('bmfont-text', str);
-    button.setAttribute('class', classname);
-    button.setAttribute('id', classname + id);
+    button.setAttribute('class', 'menubutton');
+    button.setAttribute('id', 'menutext' + count);
     button.setAttribute('scale', "1 1 1");
     button.setAttribute('width', "20");
     button.setAttribute('visible', true);
@@ -44,13 +67,8 @@ function addVarButton(vartext, classname, id, count) {
     var position = posx + " " + posy + " -3.9";
     button.setAttribute('position', position);
     var menuPanel = document.createElement('a-plane');
-    if (classname == 'CBStopcat') {
-        var panelclass = 'topmenupanel';
-    } else {
-        var panelclass = 'submenupanel';
-    }
-    menuPanel.setAttribute('class', panelclass);
-    menuPanel.setAttribute('id', panelclass + id);
+    menuPanel.setAttribute('class', 'menupanel');
+    menuPanel.setAttribute('id', 'menupanel' + count);
     menuPanel.setAttribute('width', '3');
     menuPanel.setAttribute('height', '0.2');
     menuPanel.setAttribute('color', 'gray');
@@ -73,7 +91,11 @@ function get_CBS_varnames() {
             console.log(JSON.parse(xhr.responseText));
             variables = JSON.parse(xhr.responseText).value;
             console.log(variables);
-            menuData = variables.reduce(function(map, node) {
+            menuLookup = {};
+            for (var i = 0, len = variables.length; i < len; i++) {
+                menuLookup[variables[i].ID] = variables[i];
+            }
+            variables = variables.reduce(function(map, node) {
                 map.i[node.ID] = node;
                 node.children = [];
                 node.ParentID === null ?
@@ -84,13 +106,28 @@ function get_CBS_varnames() {
                 i: {},
                 result: []
             }).result;
-            menuLookup = {};
-            for (var i = 0, len = menuData.length; i < len; i++) {
-                menuLookup[menuData[i].ID] = menuData[i];
+
+            var remove = ['Wijken en buurten', 'Regioaanduiding', 'Postcode'];
+            for (var i = 0; i < remove.length; i++) {
+                var index = findWithAttr(variables, 'Title', remove[i]);
+                if (index > -1) {
+                    variables.splice(index, 1);
+                }
             }
-            for (var i = 0; i < menuData.length; i++) {
-                button = addVarButton(menuData[i].Title, 'CBStopcat', menuData[i].ID, i);
+            var CBSdata = {};
+            CBSdata.Title = 'CBS data';
+            CBSdata.ID = 999;
+            CBSdata.Type = 'TopicGroup';
+            CBSdata.children = variables;
+            menuData[0] = CBSdata;
+            console.log(menuData);
+            //remove some unnecessary items from menuData
+            button = addVarButton(menuData[0].Title, 'CBStopcat', menuData[0].ID, 0);
+            menuLookup[999] = menuData[0];
+            for (var i = 0; i < menuData[0]['children'].length; i++) {
+                button = addVarButton(menuData[0]['children'][i].Title, 'CBStopcat', menuData[0]['children'][i].ID, i + 1);
             }
+
 
         }
 
@@ -119,7 +156,7 @@ function onLocationUpdate(lat, long, width, height) {
                 x: 0,
                 y: 0,
                 z: 0.15
-            }, true);
+            }, district.id);
             districtCache[district.id] = district;
         }
         Object.keys(districtCache).forEach(markerId => {
@@ -137,13 +174,14 @@ function onLocationUpdate(lat, long, width, height) {
             }
             setProperty(district.marker, 'id', district.id);
             setProperty(district.marker, 'position', position);
-            extra_markers = create_extra_markers(position);
+            extra_markers = create_extra_markers(position, district.id);
         });
     });
 }
 
-function create_extra_markers(position) {
+function create_extra_markers(position, id) {
     for (var i = 0; i < 3; i++) {
+        var barNr = i + 1;
         var posx = position.x + 0.03 + i * 0.03;
         var posy = position.y;
         var posz = 0.1;
@@ -166,7 +204,7 @@ function create_extra_markers(position) {
         });
         point.setAttribute('color', 'fuchsia');
         point.setAttribute('class', 'bar');
-        point.setAttribute('bar', 'wijkid');
+        point.setAttribute('bar', id + barNr);
         point.setAttribute('isFirst', false);
         marker.appendChild(point);
         mapEl.appendChild(marker);
@@ -182,6 +220,7 @@ var menu = get_CBS_varnames();
 //get_CBS_varnames_local();
 
 // Once the map is loaded
+
 mapEl.addEventListener('map-loaded', function() {
     mapEl.setAttribute('map', 'style', JSON.stringify(style));
     var geomData = mapEl.components.geometry.data;
