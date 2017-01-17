@@ -50,21 +50,21 @@ function fillMenuButton(vartext, id, number, type) {
 
 
 function addVarButton(vartext, classname, id, count) {
-    var scene = document.getElementById('scene');
+    var selection_panel = document.getElementById('selection_panel');
     var button = document.createElement('a-entity');
     var str = 'color:white'.concat('; text: ', vartext, ';');
     button.setAttribute('bmfont-text', str);
     button.setAttribute('class', 'menubutton');
     button.setAttribute('id', 'menutext' + count);
-    button.setAttribute('scale', "1 1 1");
+    button.setAttribute('scale', "0.4 0.4 0.4");
     button.setAttribute('width', "20");
     button.setAttribute('visible', true);
-    var posx = -3;
+    var posx = -0.6;
     var cnt = count;
     console.log(cnt);
 
-    var posy = 4 - (cnt / 4);
-    var position = posx + " " + posy + " -3.9";
+    var posy = 0.4 - (cnt / 12);
+    var position = posx + " " + posy + " 0.01";
     button.setAttribute('position', position);
     var menuPanel = document.createElement('a-plane');
     menuPanel.setAttribute('class', 'menupanel');
@@ -75,7 +75,7 @@ function addVarButton(vartext, classname, id, count) {
     menuPanel.setAttribute('position', "1.4 0.08 -0.01");
     menuPanel.setAttribute('submenu', id);
     button.appendChild(menuPanel);
-    scene.appendChild(button);
+    selection_panel.appendChild(button);
     return button;
 }
 

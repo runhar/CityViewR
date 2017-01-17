@@ -1,4 +1,4 @@
-var style = {
+{
   "version": 8,
   "name": "Positron",
   "metadata": {
@@ -41,7 +41,7 @@ var style = {
       "id": "background",
       "type": "background",
       "paint": {
-        "background-color": "rgba(73, 74, 71, 1)"
+        "background-color": "rgba(242, 243, 240, 0.61)"
       }
     },
     {
@@ -58,7 +58,7 @@ var style = {
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(54, 56, 56, 1)",
+        "fill-color": "rgba(105, 106, 106, 1)",
         "fill-antialias": true,
         "fill-outline-color": {
           "base": 1,
@@ -164,7 +164,7 @@ var style = {
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(111, 111, 107, 1)",
+        "fill-color": "rgba(234, 234, 230, 0.46)",
         "fill-opacity": {
           "base": 0.6,
           "stops": [
@@ -203,7 +203,7 @@ var style = {
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(76, 79, 76, 1)",
+        "fill-color": "rgb(220,224,220)",
         "fill-opacity": {
           "base": 1,
           "stops": [
@@ -233,7 +233,7 @@ var style = {
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(121, 123, 120, 1)"
+        "fill-color": "rgb(230, 233, 229)"
       }
     },
     {
@@ -335,7 +335,7 @@ var style = {
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(33, 31, 31, 1)",
+        "line-color": "rgb(213, 213, 213)",
         "line-width": {
           "base": 1.4,
           "stops": [
@@ -585,7 +585,7 @@ var style = {
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(74, 72, 72, 1)",
+        "line-color": "rgba(128, 124, 124, 1)",
         "line-width": {
           "base": 1.3,
           "stops": [
@@ -673,7 +673,7 @@ var style = {
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(65, 63, 63, 1)",
+        "line-color": "rgb(213, 213, 213)",
         "line-width": {
           "base": 1.4,
           "stops": [
@@ -744,7 +744,7 @@ var style = {
             ],
             [
               6,
-              "rgba(141, 141, 141, 1)"
+              "rgba(216, 209, 209, 1)"
             ]
           ]
         },
@@ -1358,7 +1358,7 @@ var style = {
           "Klokantech Noto Sans CJK Regular"
         ],
         "text-justify": "left",
-        "visibility": "none",
+        "visibility": "visible",
         "text-offset": [
           0.5,
           0.2
@@ -1829,5 +1829,4 @@ var style = {
     }
   ],
   "id": "ciwf3o3u2008z2pmq7pmvm6xq"
-
-};
+}
