@@ -19,6 +19,7 @@
         var variables = [];
         var menuData = [];
         var menuLookup = {};
+        var dataLookup = {};
 
 
         function find(array, id) {
@@ -51,7 +52,6 @@
                     }
                     var menuItem = menuLookup[this.data];
                     var parents = find(menuData, this.data);
-                    console.log(parents);
                     if (menuItem.ID == 999) {
                         fillMenuButton(menuItem.Title, menuItem.ID, 0, menuItem.Type);
                         var childItems = menuItem.children;
@@ -63,7 +63,6 @@
                         var level = parents.length;
                         for (var i = 0; i < parents.length; i++) {
                             var item = menuLookup[parents[i]];
-                            console.log(item);
                             fillMenuButton(item.Title, item.ID, i, item.Type);
                         }
                         var menuItem = menuLookup[this.data];
@@ -96,15 +95,11 @@
             },
             init() {
                 this.el.setAttribute('transparent', true);
-                this.el.setAttribute('opacity', 0.8);
+                this.el.setAttribute('opacity', .85);
                 this.el.setAttribute('selected', false);
 
                 this.el.addEventListener('click', () => {
-                    for (var v = 0; v < variables.length; v++) {
-                        if (variables[v]['ParentID'] == this.data) {
-                            console.log(variables[v]['Title']);
-                        }
-                    }
+                    console.log(dataLookup[this.data]['Marokko_19']);
                 });
             }
         });
@@ -112,7 +107,7 @@
 </head>
 
 <body>
-    <a-scene id="scene" fog="color: #bc483e; near: 0; far: 25;">
+    <a-scene id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
 
         <a-map width="7" height="4" position="0 0 -2" rotation="-90 0 0">
             <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.01"></a-sphere>
@@ -125,25 +120,19 @@
         </a-plane>
         <a-entity vive-controls="hand: left"></a-entity>
         <a-entity vive-controls="hand: right"></a-entity>
-        <!-- Red directional light shining from the top left. -->
+
         <a-light position="-1 5 0"></a-light>
-
-        <!-- Blue point light, 5 meters in the air. -->
-        <a-light type="point" position="1 1 -0.37" intensity="1.5" ></a-light>
-
-        <!-- Green point light, 2 meters in the air. -->
-        <a-light type="point"  position="0 2 -1.7" intensity="2"></a-light>
-<a-light type="point"  position="0 2 1.7" intensity="2"></a-light>
-
-        <!-- Dim ambient lighting. -->
-        <a-light type="ambient"  intensity="1"></a-light>
+        <a-light type="point" position="1 1 -0.37" intensity=".5" ></a-light>
+        <a-light type="point"  position="0 2 -1.7" intensity=".5"></a-light>
+        <a-light type="point"  position="0 2 1.7" intensity=".5"></a-light>
+        <a-light type="ambient"  intensity=".4"></a-light>
 
         <!--<a-sky color="#fff"></a-sky>-->
-       <a-entity id="sky"geometry="primitive: sphere; radius: 100;" material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
+       <a-entity id="sky"geometry="primitive: sphere; radius: 25;" material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
 
         <a-entity position="0 1.6 1">
             <a-camera look-controls wasd-controls>
-                <a-cursor color="#4CC3D9" fuse="true" timeout="250"></a-cursor>
+                <a-cursor id="cursor" color="#4CC3D9" fuse="true" timeout="250"></a-cursor>
             </a-camera>
         </a-entity>
 

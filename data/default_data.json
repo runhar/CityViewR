@@ -1,0 +1,203 @@
+{
+  "odata.metadata":"http://opendata.cbs.nl/ODataApi/OData/83487NED/$metadata#Cbs.OData.WebAPI.TypedDataSet&$select=WijkenEnBuurten,Marokko_19,NederlandseAntillenEnAruba_20,Suriname_21,Turkije_22,OverigNietWesters_23","value":[
+    {
+      "WijkenEnBuurten":"WK036300  ","Marokko_19":25,"NederlandseAntillenEnAruba_20":40,"Suriname_21":80,"Turkije_22":40,"OverigNietWesters_23":455
+    },{
+      "WijkenEnBuurten":"WK036301  ","Marokko_19":35,"NederlandseAntillenEnAruba_20":35,"Suriname_21":65,"Turkije_22":40,"OverigNietWesters_23":465
+    },{
+      "WijkenEnBuurten":"WK036302  ","Marokko_19":10,"NederlandseAntillenEnAruba_20":45,"Suriname_21":70,"Turkije_22":45,"OverigNietWesters_23":445
+    },{
+      "WijkenEnBuurten":"WK036303  ","Marokko_19":20,"NederlandseAntillenEnAruba_20":35,"Suriname_21":70,"Turkije_22":70,"OverigNietWesters_23":435
+    },{
+      "WijkenEnBuurten":"WK036304  ","Marokko_19":85,"NederlandseAntillenEnAruba_20":80,"Suriname_21":265,"Turkije_22":75,"OverigNietWesters_23":780
+    },{
+      "WijkenEnBuurten":"WK036305  ","Marokko_19":195,"NederlandseAntillenEnAruba_20":75,"Suriname_21":365,"Turkije_22":80,"OverigNietWesters_23":780
+    },{
+      "WijkenEnBuurten":"WK036306  ","Marokko_19":290,"NederlandseAntillenEnAruba_20":170,"Suriname_21":435,"Turkije_22":175,"OverigNietWesters_23":1340
+    },{
+      "WijkenEnBuurten":"WK036307  ","Marokko_19":45,"NederlandseAntillenEnAruba_20":60,"Suriname_21":115,"Turkije_22":80,"OverigNietWesters_23":535
+    },{
+      "WijkenEnBuurten":"WK036308  ","Marokko_19":135,"NederlandseAntillenEnAruba_20":65,"Suriname_21":285,"Turkije_22":55,"OverigNietWesters_23":720
+    },{
+      "WijkenEnBuurten":"WK036309  ","Marokko_19":615,"NederlandseAntillenEnAruba_20":115,"Suriname_21":825,"Turkije_22":215,"OverigNietWesters_23":1270
+    },{
+      "WijkenEnBuurten":"WK036310  ","Marokko_19":0,"NederlandseAntillenEnAruba_20":0,"Suriname_21":5,"Turkije_22":0,"OverigNietWesters_23":20
+    },{
+      "WijkenEnBuurten":"WK036311  ","Marokko_19":0,"NederlandseAntillenEnAruba_20":0,"Suriname_21":5,"Turkije_22":5,"OverigNietWesters_23":15
+    },{
+      "WijkenEnBuurten":"WK036312  ","Marokko_19":15,"NederlandseAntillenEnAruba_20":5,"Suriname_21":30,"Turkije_22":10,"OverigNietWesters_23":65
+    },{
+      "WijkenEnBuurten":"WK036313  ","Marokko_19":875,"NederlandseAntillenEnAruba_20":150,"Suriname_21":890,"Turkije_22":260,"OverigNietWesters_23":1205
+    },{
+      "WijkenEnBuurten":"WK036314  ","Marokko_19":905,"NederlandseAntillenEnAruba_20":125,"Suriname_21":595,"Turkije_22":260,"OverigNietWesters_23":1345
+    },{
+      "WijkenEnBuurten":"WK036315  ","Marokko_19":230,"NederlandseAntillenEnAruba_20":25,"Suriname_21":120,"Turkije_22":60,"OverigNietWesters_23":230
+    },{
+      "WijkenEnBuurten":"WK036316  ","Marokko_19":515,"NederlandseAntillenEnAruba_20":90,"Suriname_21":270,"Turkije_22":150,"OverigNietWesters_23":790
+    },{
+      "WijkenEnBuurten":"WK036317  ","Marokko_19":130,"NederlandseAntillenEnAruba_20":60,"Suriname_21":130,"Turkije_22":55,"OverigNietWesters_23":320
+    },{
+      "WijkenEnBuurten":"WK036318  ","Marokko_19":410,"NederlandseAntillenEnAruba_20":80,"Suriname_21":285,"Turkije_22":190,"OverigNietWesters_23":530
+    },{
+      "WijkenEnBuurten":"WK036319  ","Marokko_19":625,"NederlandseAntillenEnAruba_20":65,"Suriname_21":420,"Turkije_22":250,"OverigNietWesters_23":725
+    },{
+      "WijkenEnBuurten":"WK036320  ","Marokko_19":110,"NederlandseAntillenEnAruba_20":75,"Suriname_21":195,"Turkije_22":70,"OverigNietWesters_23":505
+    },{
+      "WijkenEnBuurten":"WK036321  ","Marokko_19":130,"NederlandseAntillenEnAruba_20":65,"Suriname_21":165,"Turkije_22":90,"OverigNietWesters_23":515
+    },{
+      "WijkenEnBuurten":"WK036322  ","Marokko_19":45,"NederlandseAntillenEnAruba_20":15,"Suriname_21":50,"Turkije_22":15,"OverigNietWesters_23":155
+    },{
+      "WijkenEnBuurten":"WK036323  ","Marokko_19":20,"NederlandseAntillenEnAruba_20":35,"Suriname_21":75,"Turkije_22":40,"OverigNietWesters_23":685
+    },{
+      "WijkenEnBuurten":"WK036324  ","Marokko_19":400,"NederlandseAntillenEnAruba_20":135,"Suriname_21":480,"Turkije_22":225,"OverigNietWesters_23":1335
+    },{
+      "WijkenEnBuurten":"WK036325  ","Marokko_19":565,"NederlandseAntillenEnAruba_20":115,"Suriname_21":570,"Turkije_22":265,"OverigNietWesters_23":1045
+    },{
+      "WijkenEnBuurten":"WK036326  ","Marokko_19":850,"NederlandseAntillenEnAruba_20":95,"Suriname_21":580,"Turkije_22":325,"OverigNietWesters_23":915
+    },{
+      "WijkenEnBuurten":"WK036327  ","Marokko_19":210,"NederlandseAntillenEnAruba_20":50,"Suriname_21":190,"Turkije_22":65,"OverigNietWesters_23":440
+    },{
+      "WijkenEnBuurten":"WK036328  ","Marokko_19":1090,"NederlandseAntillenEnAruba_20":110,"Suriname_21":880,"Turkije_22":545,"OverigNietWesters_23":1155
+    },{
+      "WijkenEnBuurten":"WK036329  ","Marokko_19":1135,"NederlandseAntillenEnAruba_20":120,"Suriname_21":805,"Turkije_22":650,"OverigNietWesters_23":945
+    },{
+      "WijkenEnBuurten":"WK036330  ","Marokko_19":1600,"NederlandseAntillenEnAruba_20":110,"Suriname_21":805,"Turkije_22":670,"OverigNietWesters_23":980
+    },{
+      "WijkenEnBuurten":"WK036331  ","Marokko_19":2295,"NederlandseAntillenEnAruba_20":140,"Suriname_21":985,"Turkije_22":990,"OverigNietWesters_23":1450
+    },{
+      "WijkenEnBuurten":"WK036332  ","Marokko_19":2135,"NederlandseAntillenEnAruba_20":130,"Suriname_21":970,"Turkije_22":1125,"OverigNietWesters_23":1190
+    },{
+      "WijkenEnBuurten":"WK036333  ","Marokko_19":790,"NederlandseAntillenEnAruba_20":160,"Suriname_21":1030,"Turkije_22":425,"OverigNietWesters_23":1485
+    },{
+      "WijkenEnBuurten":"WK036334  ","Marokko_19":20,"NederlandseAntillenEnAruba_20":35,"Suriname_21":55,"Turkije_22":5,"OverigNietWesters_23":130
+    },{
+      "WijkenEnBuurten":"WK036335  ","Marokko_19":1310,"NederlandseAntillenEnAruba_20":215,"Suriname_21":1440,"Turkije_22":430,"OverigNietWesters_23":1550
+    },{
+      "WijkenEnBuurten":"WK036336  ","Marokko_19":15,"NederlandseAntillenEnAruba_20":0,"Suriname_21":25,"Turkije_22":5,"OverigNietWesters_23":40
+    },{
+      "WijkenEnBuurten":"WK036337  ","Marokko_19":3460,"NederlandseAntillenEnAruba_20":185,"Suriname_21":935,"Turkije_22":1920,"OverigNietWesters_23":1865
+    },{
+      "WijkenEnBuurten":"WK036338  ","Marokko_19":595,"NederlandseAntillenEnAruba_20":55,"Suriname_21":155,"Turkije_22":505,"OverigNietWesters_23":455
+    },{
+      "WijkenEnBuurten":"WK036339  ","Marokko_19":2710,"NederlandseAntillenEnAruba_20":120,"Suriname_21":560,"Turkije_22":1660,"OverigNietWesters_23":900
+    },{
+      "WijkenEnBuurten":"WK036340  ","Marokko_19":340,"NederlandseAntillenEnAruba_20":50,"Suriname_21":210,"Turkije_22":235,"OverigNietWesters_23":510
+    },{
+      "WijkenEnBuurten":"WK036341  ","Marokko_19":995,"NederlandseAntillenEnAruba_20":130,"Suriname_21":670,"Turkije_22":570,"OverigNietWesters_23":835
+    },{
+      "WijkenEnBuurten":"WK036342  ","Marokko_19":1265,"NederlandseAntillenEnAruba_20":125,"Suriname_21":580,"Turkije_22":865,"OverigNietWesters_23":1080
+    },{
+      "WijkenEnBuurten":"WK036343  ","Marokko_19":275,"NederlandseAntillenEnAruba_20":65,"Suriname_21":225,"Turkije_22":230,"OverigNietWesters_23":525
+    },{
+      "WijkenEnBuurten":"WK036344  ","Marokko_19":220,"NederlandseAntillenEnAruba_20":110,"Suriname_21":310,"Turkije_22":120,"OverigNietWesters_23":775
+    },{
+      "WijkenEnBuurten":"WK036345  ","Marokko_19":105,"NederlandseAntillenEnAruba_20":30,"Suriname_21":180,"Turkije_22":65,"OverigNietWesters_23":270
+    },{
+      "WijkenEnBuurten":"WK036346  ","Marokko_19":50,"NederlandseAntillenEnAruba_20":25,"Suriname_21":90,"Turkije_22":50,"OverigNietWesters_23":375
+    },{
+      "WijkenEnBuurten":"WK036347  ","Marokko_19":35,"NederlandseAntillenEnAruba_20":90,"Suriname_21":175,"Turkije_22":70,"OverigNietWesters_23":765
+    },{
+      "WijkenEnBuurten":"WK036348  ","Marokko_19":575,"NederlandseAntillenEnAruba_20":140,"Suriname_21":555,"Turkije_22":245,"OverigNietWesters_23":1005
+    },{
+      "WijkenEnBuurten":"WK036349  ","Marokko_19":20,"NederlandseAntillenEnAruba_20":60,"Suriname_21":95,"Turkije_22":50,"OverigNietWesters_23":570
+    },{
+      "WijkenEnBuurten":"WK036350  ","Marokko_19":0,"NederlandseAntillenEnAruba_20":0,"Suriname_21":0,"Turkije_22":0,"OverigNietWesters_23":0
+    },{
+      "WijkenEnBuurten":"WK036351  ","Marokko_19":795,"NederlandseAntillenEnAruba_20":85,"Suriname_21":645,"Turkije_22":330,"OverigNietWesters_23":890
+    },{
+      "WijkenEnBuurten":"WK036352  ","Marokko_19":230,"NederlandseAntillenEnAruba_20":105,"Suriname_21":320,"Turkije_22":105,"OverigNietWesters_23":805
+    },{
+      "WijkenEnBuurten":"WK036353  ","Marokko_19":280,"NederlandseAntillenEnAruba_20":70,"Suriname_21":235,"Turkije_22":130,"OverigNietWesters_23":350
+    },{
+      "WijkenEnBuurten":"WK036354  ","Marokko_19":375,"NederlandseAntillenEnAruba_20":100,"Suriname_21":375,"Turkije_22":120,"OverigNietWesters_23":720
+    },{
+      "WijkenEnBuurten":"WK036355  ","Marokko_19":750,"NederlandseAntillenEnAruba_20":140,"Suriname_21":620,"Turkije_22":215,"OverigNietWesters_23":965
+    },{
+      "WijkenEnBuurten":"WK036356  ","Marokko_19":330,"NederlandseAntillenEnAruba_20":115,"Suriname_21":395,"Turkije_22":155,"OverigNietWesters_23":975
+    },{
+      "WijkenEnBuurten":"WK036357  ","Marokko_19":195,"NederlandseAntillenEnAruba_20":30,"Suriname_21":210,"Turkije_22":55,"OverigNietWesters_23":300
+    },{
+      "WijkenEnBuurten":"WK036358  ","Marokko_19":60,"NederlandseAntillenEnAruba_20":135,"Suriname_21":170,"Turkije_22":60,"OverigNietWesters_23":340
+    },{
+      "WijkenEnBuurten":"WK036359  ","Marokko_19":10,"NederlandseAntillenEnAruba_20":5,"Suriname_21":15,"Turkije_22":5,"OverigNietWesters_23":110
+    },{
+      "WijkenEnBuurten":"WK036360  ","Marokko_19":1125,"NederlandseAntillenEnAruba_20":130,"Suriname_21":750,"Turkije_22":480,"OverigNietWesters_23":1335
+    },{
+      "WijkenEnBuurten":"WK036361  ","Marokko_19":1230,"NederlandseAntillenEnAruba_20":150,"Suriname_21":725,"Turkije_22":385,"OverigNietWesters_23":1275
+    },{
+      "WijkenEnBuurten":"WK036362  ","Marokko_19":85,"NederlandseAntillenEnAruba_20":15,"Suriname_21":125,"Turkije_22":30,"OverigNietWesters_23":195
+    },{
+      "WijkenEnBuurten":"WK036363  ","Marokko_19":65,"NederlandseAntillenEnAruba_20":15,"Suriname_21":95,"Turkije_22":30,"OverigNietWesters_23":125
+    },{
+      "WijkenEnBuurten":"WK036364  ","Marokko_19":10,"NederlandseAntillenEnAruba_20":15,"Suriname_21":5,"Turkije_22":5,"OverigNietWesters_23":40
+    },{
+      "WijkenEnBuurten":"WK036365  ","Marokko_19":765,"NederlandseAntillenEnAruba_20":115,"Suriname_21":695,"Turkije_22":370,"OverigNietWesters_23":935
+    },{
+      "WijkenEnBuurten":"WK036366  ","Marokko_19":555,"NederlandseAntillenEnAruba_20":90,"Suriname_21":635,"Turkije_22":485,"OverigNietWesters_23":800
+    },{
+      "WijkenEnBuurten":"WK036367  ","Marokko_19":100,"NederlandseAntillenEnAruba_20":20,"Suriname_21":135,"Turkije_22":55,"OverigNietWesters_23":185
+    },{
+      "WijkenEnBuurten":"WK036368  ","Marokko_19":2275,"NederlandseAntillenEnAruba_20":215,"Suriname_21":1365,"Turkije_22":1680,"OverigNietWesters_23":2270
+    },{
+      "WijkenEnBuurten":"WK036369  ","Marokko_19":985,"NederlandseAntillenEnAruba_20":190,"Suriname_21":950,"Turkije_22":775,"OverigNietWesters_23":1980
+    },{
+      "WijkenEnBuurten":"WK036370  ","Marokko_19":1930,"NederlandseAntillenEnAruba_20":200,"Suriname_21":1285,"Turkije_22":1560,"OverigNietWesters_23":2155
+    },{
+      "WijkenEnBuurten":"WK036371  ","Marokko_19":25,"NederlandseAntillenEnAruba_20":20,"Suriname_21":80,"Turkije_22":25,"OverigNietWesters_23":140
+    },{
+      "WijkenEnBuurten":"WK036372  ","Marokko_19":5,"NederlandseAntillenEnAruba_20":0,"Suriname_21":5,"Turkije_22":0,"OverigNietWesters_23":15
+    },{
+      "WijkenEnBuurten":"WK036373  ","Marokko_19":5,"NederlandseAntillenEnAruba_20":10,"Suriname_21":30,"Turkije_22":10,"OverigNietWesters_23":50
+    },{
+      "WijkenEnBuurten":"WK036374  ","Marokko_19":130,"NederlandseAntillenEnAruba_20":40,"Suriname_21":210,"Turkije_22":115,"OverigNietWesters_23":250
+    },{
+      "WijkenEnBuurten":"WK036375  ","Marokko_19":825,"NederlandseAntillenEnAruba_20":75,"Suriname_21":280,"Turkije_22":480,"OverigNietWesters_23":565
+    },{
+      "WijkenEnBuurten":"WK036376  ","Marokko_19":2520,"NederlandseAntillenEnAruba_20":90,"Suriname_21":560,"Turkije_22":1725,"OverigNietWesters_23":1160
+    },{
+      "WijkenEnBuurten":"WK036377  ","Marokko_19":4860,"NederlandseAntillenEnAruba_20":165,"Suriname_21":980,"Turkije_22":2820,"OverigNietWesters_23":1815
+    },{
+      "WijkenEnBuurten":"WK036378  ","Marokko_19":3990,"NederlandseAntillenEnAruba_20":150,"Suriname_21":850,"Turkije_22":3605,"OverigNietWesters_23":1420
+    },{
+      "WijkenEnBuurten":"WK036379  ","Marokko_19":265,"NederlandseAntillenEnAruba_20":25,"Suriname_21":185,"Turkije_22":315,"OverigNietWesters_23":200
+    },{
+      "WijkenEnBuurten":"WK036380  ","Marokko_19":30,"NederlandseAntillenEnAruba_20":5,"Suriname_21":25,"Turkije_22":25,"OverigNietWesters_23":30
+    },{
+      "WijkenEnBuurten":"WK036381  ","Marokko_19":3185,"NederlandseAntillenEnAruba_20":155,"Suriname_21":1065,"Turkije_22":1575,"OverigNietWesters_23":1590
+    },{
+      "WijkenEnBuurten":"WK036382  ","Marokko_19":4495,"NederlandseAntillenEnAruba_20":210,"Suriname_21":1250,"Turkije_22":2555,"OverigNietWesters_23":1655
+    },{
+      "WijkenEnBuurten":"WK036383  ","Marokko_19":1050,"NederlandseAntillenEnAruba_20":75,"Suriname_21":475,"Turkije_22":780,"OverigNietWesters_23":730
+    },{
+      "WijkenEnBuurten":"WK036384  ","Marokko_19":1805,"NederlandseAntillenEnAruba_20":115,"Suriname_21":1420,"Turkije_22":1355,"OverigNietWesters_23":1275
+    },{
+      "WijkenEnBuurten":"WK036385  ","Marokko_19":1405,"NederlandseAntillenEnAruba_20":55,"Suriname_21":485,"Turkije_22":915,"OverigNietWesters_23":720
+    },{
+      "WijkenEnBuurten":"WK036386  ","Marokko_19":3510,"NederlandseAntillenEnAruba_20":80,"Suriname_21":525,"Turkije_22":1430,"OverigNietWesters_23":1375
+    },{
+      "WijkenEnBuurten":"WK036387  ","Marokko_19":1010,"NederlandseAntillenEnAruba_20":95,"Suriname_21":370,"Turkije_22":520,"OverigNietWesters_23":995
+    },{
+      "WijkenEnBuurten":"WK036388  ","Marokko_19":840,"NederlandseAntillenEnAruba_20":120,"Suriname_21":965,"Turkije_22":665,"OverigNietWesters_23":1120
+    },{
+      "WijkenEnBuurten":"WK036389  ","Marokko_19":2355,"NederlandseAntillenEnAruba_20":85,"Suriname_21":660,"Turkije_22":885,"OverigNietWesters_23":1010
+    },{
+      "WijkenEnBuurten":"WK036390  ","Marokko_19":230,"NederlandseAntillenEnAruba_20":130,"Suriname_21":445,"Turkije_22":170,"OverigNietWesters_23":1630
+    },{
+      "WijkenEnBuurten":"WK036391  ","Marokko_19":155,"NederlandseAntillenEnAruba_20":70,"Suriname_21":260,"Turkije_22":155,"OverigNietWesters_23":1025
+    },{
+      "WijkenEnBuurten":"WK036392  ","Marokko_19":15,"NederlandseAntillenEnAruba_20":20,"Suriname_21":40,"Turkije_22":5,"OverigNietWesters_23":100
+    },{
+      "WijkenEnBuurten":"WK036393  ","Marokko_19":620,"NederlandseAntillenEnAruba_20":1455,"Suriname_21":7605,"Turkije_22":425,"OverigNietWesters_23":7290
+    },{
+      "WijkenEnBuurten":"WK036394  ","Marokko_19":560,"NederlandseAntillenEnAruba_20":1535,"Suriname_21":8765,"Turkije_22":265,"OverigNietWesters_23":7625
+    },{
+      "WijkenEnBuurten":"WK036395  ","Marokko_19":20,"NederlandseAntillenEnAruba_20":75,"Suriname_21":415,"Turkije_22":25,"OverigNietWesters_23":400
+    },{
+      "WijkenEnBuurten":"WK036396  ","Marokko_19":390,"NederlandseAntillenEnAruba_20":945,"Suriname_21":6040,"Turkije_22":145,"OverigNietWesters_23":3805
+    },{
+      "WijkenEnBuurten":"WK036397  ","Marokko_19":185,"NederlandseAntillenEnAruba_20":450,"Suriname_21":3050,"Turkije_22":60,"OverigNietWesters_23":2225
+    },{
+      "WijkenEnBuurten":"WK036398  ","Marokko_19":15,"NederlandseAntillenEnAruba_20":15,"Suriname_21":65,"Turkije_22":5,"OverigNietWesters_23":20
+    }
+  ]
+}
