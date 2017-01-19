@@ -17,7 +17,6 @@ function findWithAttr(array, attr, value) {
     return -1;
 }
 
-
 // add bar which will show data by height and color
 function addMarker(position, id) {
     var marker = document.createElement('a-entity');
@@ -43,15 +42,20 @@ function addMarker(position, id) {
 
 function fillMenuButton(vartext, id, number, type) {
     var buttontext = document.getElementById('menutext' + number);
-    var str = 'color:white'.concat('; text: ', vartext, ';');
+    var str = 'color:white'.concat('; text: ', vartext.replace(';', '-'), ';');
     buttontext.setAttribute('bmfont-text', str);
     buttontext.setAttribute('visible', true);
     var buttonpanel = document.getElementById('menupanel' + number);
     buttonpanel.setAttribute('submenu', id);
     if (type == 'TopicGroup') {
-        buttonpanel.setAttribute('opacity', .2);
+        buttonpanel.setAttribute('opacity', .8);
+        buttonpanel.setAttribute('color', 'lightslategray');
+    } else if (type == 'Parent'){
+      buttonpanel.setAttribute('opacity', .8);
+      buttonpanel.setAttribute('color', 'purple');
     } else {
         buttonpanel.setAttribute('opacity', 0);
+        buttonpanel.setAttribute('color', 'gray');
     }
 }
 
@@ -69,7 +73,6 @@ function addVarButton(vartext, classname, id, count) {
     var posx = -0.6;
     var cnt = count;
     console.log(cnt);
-
     var posy = 0.4 - (cnt / 12);
     var position = posx + " " + posy + " 0.01";
     button.setAttribute('position', position);
@@ -224,7 +227,7 @@ function setBars(data, max){
     //position.y = (height/maxBarValue)/2;
     //bar.setAttribute('position', {position[x], position[y], z});
     //bar.object3D.position.set(position.x, position.y, position.z);
-    bar.setAttribute('height', (height/maxBarValue));
+    bar.setAttribute('height', (height/maxBarValue)*1);
     bar.setAttribute('color', barData[i]['color']);
     bar.setAttribute('visible', true);
   }
@@ -289,8 +292,8 @@ mapEl.addEventListener('map-loaded', function() {
     mapEl.setAttribute('map', 'style', JSON.stringify(style));
     var geomData = mapEl.components.geometry.data;
     //Amsterdam centre (TODO: get centre and zoom from geojson data)
-    var long = 4.895168;
-    var lat = 52.370216;
+    var long = 4.918273;
+    var lat = 52.372523;
     // center the map on that location
     setProperty(mapEl, 'map.center', long + ' ' + lat);
     // and zoom in: 20 is very zoomed in, 0 is really zoomed out

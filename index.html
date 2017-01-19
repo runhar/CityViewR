@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <script src="js/aframe-map.js"></script>
     <script src="js/aframe-bmfont-text-component.js"></script>
+      <script src="js/aframe-vive-cursor-component.min.js"></script>
     <script src="js/skyGradient.js"></script>
     <!--
     <script src="js/aframe-layout-component.min.js"></script>
@@ -12,7 +13,7 @@
     <script src="js/aframe-textwrap-component.min.js"></script>-->
 
     <script>
-      //  var venueCache = {};
+        //  var venueCache = {};
         var districtCache = {};
         var CBSvarCache = {};
         var IsSelected = {};
@@ -53,7 +54,7 @@
                     var menuItem = menuLookup[this.data];
                     var parents = find(menuData, this.data);
                     if (menuItem.ID == 999) {
-                        fillMenuButton(menuItem.Title, menuItem.ID, 0, menuItem.Type);
+                        fillMenuButton(menuItem.Title, menuItem.ID, 0, 'Parent');
                         var childItems = menuItem.children;
                         for (var i = 0; i < childItems.length; i++) {
                             var j = i + 1;
@@ -63,7 +64,7 @@
                         var level = parents.length;
                         for (var i = 0; i < parents.length; i++) {
                             var item = menuLookup[parents[i]];
-                            fillMenuButton(item.Title, item.ID, i, item.Type);
+                            fillMenuButton(item.Title, item.ID, i, 'Parent');
                         }
                         var menuItem = menuLookup[this.data];
                         var childItems = menuItem.children;
@@ -109,30 +110,31 @@
 <body>
     <a-scene id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
 
-        <a-map width="7" height="4" position="0 0 -2" rotation="-90 0 0">
+        <a-map width="7" height="4" position="0 0 -1" rotation="-90 0 0">
             <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.01"></a-sphere>
         </a-map>
-        <a-plane id="selection_panel" color="black" position="-1.5 1.6 0" rotation="-30 45 0" width="1.3" height="1" visible="true">
+        <a-plane id="selection_panel" color="black" position="-1.5 1 .6" rotation="-30 45 0" width="1.3" height="1" visible="true">
         </a-plane>
 
 
-        <a-plane id="infopanel" color="black" position="0 2.5 -4.5" width="4" height="2" visible="true" transparent="true" opacity="1" rotation="0 0 0 ">
+        <a-plane id="infopanel" color="black" position="0 1.5 -4.5" width="4" height="2" visible="true" transparent="true" opacity="1" rotation="0 0 0 ">
         </a-plane>
-        <a-entity vive-controls="hand: left"></a-entity>
-        <a-entity vive-controls="hand: right"></a-entity>
-
+        <!--
+        <a-entity vive-controls="hand: left" vive-cursor></a-entity>
+        <a-entity vive-controls="hand: right" vive-cursor></a-entity>
+      -->
         <a-light position="-1 5 0"></a-light>
-        <a-light type="point" position="1 1 -0.37" intensity=".5" ></a-light>
-        <a-light type="point"  position="0 2 -1.7" intensity=".5"></a-light>
-        <a-light type="point"  position="0 2 1.7" intensity=".5"></a-light>
-        <a-light type="ambient"  intensity=".4"></a-light>
+        <a-light type="point" position="1 1 -0.37" intensity=".5"></a-light>
+        <a-light type="point" position="0 2 -1.7" intensity=".5"></a-light>
+        <a-light type="point" position="0 2 1.7" intensity=".5"></a-light>
+        <a-light type="ambient" intensity=".4"></a-light>
 
         <!--<a-sky color="#fff"></a-sky>-->
-       <a-entity id="sky"geometry="primitive: sphere; radius: 25;" material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
+        <a-entity id="sky" geometry="primitive: sphere; radius: 50;" material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
 
-        <a-entity position="0 1.6 1">
+        <a-entity position="0 0 1">
             <a-camera look-controls wasd-controls>
-                <a-cursor id="cursor" color="#4CC3D9" fuse="true" timeout="250"></a-cursor>
+                <a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="750"></a-cursor>
             </a-camera>
         </a-entity>
 
