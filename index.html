@@ -1,16 +1,113 @@
 <html>
 
 <head>
+      <meta charset="UTF-8">
+<style type="text/css">
+  #target {
+    width: 1024px;
+    height: 512px;
+    position: absolute;
+    background: rgba(255,255,0,0.3);
+    background: black;
+  }
+
+  #htmlTarget.hide {
+    z-index: -1;
+  }
+
+  #target h1 {
+    font-family: Arial;
+    font-size: 16px;
+    margin: 5;
+    vertical-align: top;
+    color: white;
+  }
+
+
+  #target h1 span {
+    color: black;
+  }
+
+  #emoji {
+    position: absolute;
+    font-size: 512px;
+    color: mediumTurquoise;
+    font-style: serif;
+  }
+
+  #pre {
+    font-family: arial;
+    margin: 5;
+    padding: 0;
+    height: 14px;
+    font-size: 14px;
+    background: royalblue;
+    color: white;
+  }
+
+  #districtInfo {
+    font-family: Arial;
+    margin: 5;
+    padding: 2;
+    height: 14px;
+    font-size: 12px;
+    background: black;
+    color: white;
+  }
+
+  #htmlTarget {
+    position: absolute;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #debug {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  @media (max-width: 512px) {
+    #target {
+      width: 256px;
+      height: 126px;
+    }
+
+    #target h1 {
+      font-size: 55px;
+    }
+
+    #pre {
+      height: 50px;
+      font-size: 25px;
+    }
+
+    #emoji {
+      position: absolute;
+      font-size: 256px;
+      color: mediumTurquoise;
+    }
+  }
+
+  body[data-vr="true"] .novr{
+    display: none;
+  }
+  </style>
     <title>CityViewR</title>
-    <meta charset="UTF-8">
     <script src="js/aframe-map.js"></script>
     <script src="js/aframe-bmfont-text-component.js"></script>
       <script src="js/aframe-vive-cursor-component.min.js"></script>
     <script src="js/skyGradient.js"></script>
     <!--
-    <script src="js/aframe-layout-component.min.js"></script>
+    <script src="js/aframe-layout-component.min.js"></script>-->
     <script src="js/aframe-draw-component.min.js"></script>
-    <script src="js/aframe-textwrap-component.min.js"></script>-->
+    <!--<script src="js/aframe-html-shader.min.js"></script>-->
+    <script src="js/aframe-htmltexture-component.min.js"></script>
+  <!--  <script src="js/aframe-fit-texture-component.min.js"></script>-->
+
+    <!--<script src="js/aframe-textwrap-component.min.js"></script>-->
 
     <script>
         //  var venueCache = {};
@@ -21,7 +118,7 @@
         var menuData = [];
         var menuLookup = {};
         var dataLookup = {};
-
+        var varTitleLookup = {};
 
         function find(array, id) {
             if (typeof array != 'undefined') {
@@ -48,43 +145,34 @@
                 this.el.setAttribute('selected', false);
                 this.el.addEventListener('click', () => {
                     var menuButtons = document.getElementsByClassName('menubutton');
+                    if (this.data != 'noAction'){
                     for (var i = 0; i < menuButtons.length; i++) {
                         menuButtons[i].setAttribute('visible', false);
                     }
                     var menuItem = menuLookup[this.data];
                     var parents = find(menuData, this.data);
                     if (menuItem.ID == 999) {
-                        fillMenuButton(menuItem.Title, menuItem.ID, 0, 'Parent');
+                        fillMenuButton(menuItem.Title, menuItem.ID, 0, 'Parent', '');
                         var childItems = menuItem.children;
                         for (var i = 0; i < childItems.length; i++) {
                             var j = i + 1;
-                            fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type);
+                            fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type,childItems[i].Key);
                         }
                     } else {
                         var level = parents.length;
                         for (var i = 0; i < parents.length; i++) {
                             var item = menuLookup[parents[i]];
-                            fillMenuButton(item.Title, item.ID, i, 'Parent');
+                            fillMenuButton(item.Title, item.ID, i, 'Parent', item.Key);
                         }
                         var menuItem = menuLookup[this.data];
                         var childItems = menuItem.children;
                         for (var i = 0; i < childItems.length; i++) {
                             var j = i + level;
-                            fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type);
+                            fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type, childItems[i].Key);
                         }
                     }
-                    //if (parents != null){
-                    //var level = parents.length;
-                    //for (var i=0;i<level;i++){
-                    //var parentText = menuLookup(parents[i].Title);
-                    //console.log(parentText);
-                    //}
-
-                    //}
-                    //var str = 'color:white'.concat('; text: ', vartext, ';');
-                    //button.setAttribute('bmfont-text', str);
-
-                });
+                  }
+                    });
 
 
             }
@@ -100,25 +188,54 @@
                 this.el.setAttribute('selected', false);
 
                 this.el.addEventListener('click', () => {
-                    console.log(dataLookup[this.data]['Marokko_19']);
+
+                    writeDistrictInfo(this.data);
+                    //console.log(dataLookup[this.data]['Marokko_19']);
+                    //districtInfo.innerHTML = districtCache[this.data]['name'];
+                    //console.log(districtInfo.innerHTML);
+                    //console.log( districtCache[this.data]['name']);
                 });
             }
         });
+
+        function writeDistrictInfo(id){
+          var districtInfo = document.getElementById('districtInfo');
+          var district = document.getElementById('pre');
+          district.innerHTML =  'Amsterdam: '+ districtCache[id]['name'];
+          var str = '<table style="width:100%; background: black;">';
+          var barColors = chroma.scale('YlOrBr').colors(queryData.length);
+          for (var i=0; i<queryData.length;i++){
+            str = str + '<tr><td><span style="color:' + barColors[i] + '";>&#9632; </span><span style="color:white; font-size:12px;">' + varTitleLookup[queryData[i]] + ': </span></td>';
+            str = str + '<td><span style="color:white; font-size:12px";>' +dataLookup[id][queryData[i]] + '</span></td></tr>';
+          }
+          str = str + '</table>';
+          districtInfo.innerHTML = str;
+          console.log(varTitleLookup);
+        }
     </script>
 </head>
 
 <body>
-    <a-scene id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
 
+    <a-scene id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
+      <a-assets>
+        <img id="checked" src="js/checked.jpg">
+        <img id="unchecked" src="js/unchecked.jpg">
+        <div id="target">
+          <h1>CityViewR</h1>
+          <span id="pre">Amsterdam</span>
+          <div id="districtInfo"> </div>
+        </div>
+      </a-assets>
         <a-map width="7" height="4" position="0 0 -1" rotation="-90 0 0">
             <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.01"></a-sphere>
         </a-map>
+
         <a-plane id="selection_panel" color="black" position="-1.5 1 .6" rotation="-30 45 0" width="1.3" height="1" visible="true">
         </a-plane>
 
+        <a-entity id="infopanel" geometry="primitive:plane;width:4;height:2;" rotation="0 0 0" position="0 1.5 -4.5" htmltexture="asset: #target"></a-entity>
 
-        <a-plane id="infopanel" color="black" position="0 1.5 -4.5" width="4" height="2" visible="true" transparent="true" opacity="1" rotation="0 0 0 ">
-        </a-plane>
         <!--
         <a-entity vive-controls="hand: left" vive-cursor></a-entity>
         <a-entity vive-controls="hand: right" vive-cursor></a-entity>
@@ -139,6 +256,9 @@
         </a-entity>
 
     </a-scene>
+
+
+
     <script src="js/loadJSON.js"></script>
     <script src="js/TweenMax.min.js"></script>
     <script src="js/chroma.min.js"></script>
@@ -151,148 +271,8 @@
   <script src="https://rawgit.com/gmarty/aframe-ui-components/master/dist/aframe-ui-components.min.js"></script> 
 -->
     <script src="cityviewr.js"></script>
-    <!--
-    <script>
-      var mapEl = document.querySelector('a-map');
-      var currentLocationEl = document.querySelector('#current-location');
-      var setProperty = window.AFRAME.utils.entity.setComponentProperty;
-      var venueCache = {};
-	  var districtCache = {};
-
-      // Creating an inverted cone and adding it to the scene as a place marker
-      function addMarker() {
-
-        var marker = document.createElement('a-entity');
-        var point = document.createElement('a-box');
-
-        point.setAttribute('height', 0.3);
-        point.setAttribute('width', 0.01);
-		point.setAttribute('depth', 0.01);
-        //point.setAttribute('opacity', 0.8);
-        point.setAttribute('rotation', {x: 90, y: 0, z: 0});
-        point.setAttribute('position', {x: 0, y: 0, z: 0.15});
-        point.setAttribute('color', '#f00');
-
-        marker.appendChild(point);
-
-        mapEl.appendChild(marker);
-
-        return marker;
-
-      }
-
-      // Whenever we have a new location, add new markers,
-      // and update all markers positions.
-      // If a marker is off the map, hide it
 
 
-function onLocationUpdate(lat, long, width, height) {
-
-        var halfWidth = width / 2;
-        var halfHeight = height / 2;
-
-        // foursquare's free venues API
-        loadJSON('geojson/WK_GM0363.geojson', function(response) {
-        response = {"type" : "FeatureCollection", "features" : JSON.parse(response)};
-
-		for (var i = 0; i < response['features'].length; i++){
-			var district = {};
-			district.center = turf.center(response['features'][i]['geometry']);
-			district.long = district.center['geometry']['coordinates'][0];
-			district.lat = district.center['geometry']['coordinates'][1];
-			district.id = response['features'][i]['properties']['WK_CODE'];
-			district.marker = addMarker();
-			districtCache[district.id] = district;
-			}
-				  //console.log(districtCache);
-	  Object.keys(districtCache).forEach(markerId => {
-              var district = districtCache[markerId];
-              var position = mapEl.components.map.project(district.long, district.lat);
-				//console.log(position);
-              if (
-                position.x > halfWidth
-                || position.x < -halfWidth
-                || position.y > halfHeight
-                || position.y < -halfHeight
-              ) {
-                setProperty(district.marker, 'visible', false);
-              } else {
-                setProperty(district.marker, 'visible', true);
-              }
-
-              setProperty(district.marker, 'position', position);
-			  //console.log('hoera');
-            });
-      });
-
-      }
-
-
-      function onSelectionUpdate(lat, long, width, height) {
-
-        var halfWidth = width / 2;
-        var halfHeight = height / 2;
-
-        // foursquare's free venues API
-        fetch(`https://api.foursquare.com/v2/venues/explore?client_id=MWVIR52CTGVY0GZGFJB53UEUJRGJETB3SQI4KY1JWAEA1GIO&client_secret=TME3XHDYNTXQX0MMF3AME2TYW1F4KY5QUOI4RL5AP1P0GGXR&v=20161018&m=foursquare&ll=${lat},${long}&section=topPicks&time=any&day=any`)
-          .then(res => res.json())
-          .then(res => {
-            res.response.groups[0].items.map(({venue}) => ({
-              id: venue.id,
-              lat: venue.location.lat,
-              long: venue.location.lng,
-            }))
-            .filter(({id}) => !venueCache[id])
-            .forEach(venue => {
-              venue.marker = addMarker();
-              venueCache[venue.id] = venue;
-            });
-
-            Object.keys(venueCache).forEach(markerId => {
-              var venue = venueCache[markerId];
-              var position = mapEl.components.map.project(venue.long, venue.lat);
-
-              if (
-                position.x > halfWidth
-                || position.x < -halfWidth
-                || position.y > halfHeight
-                || position.y < -halfHeight
-              ) {
-                setProperty(venue.marker, 'visible', false);
-              } else {
-                setProperty(venue.marker, 'visible', true);
-              }
-
-              setProperty(venue.marker, 'position', position);
-            });
-          });
-      }
-
-      // Once the map is loaded
-      mapEl.addEventListener('map-loaded', function() {
-		mapEl.setAttribute('map', 'style', JSON.stringify(style));
-        var geomData = mapEl.components.geometry.data;
-
-          var long = 4.895168;
-          var lat = 52.370216;
-
-          // center the map on that location
-          setProperty(mapEl, 'map.center', long + ' ' + lat);
-
-          // and zoom in: 20 is very zoomed in, 0 is really zoomed out
-          setProperty(mapEl, 'map.zoom', '10');
-
-          // Place the marker in the correct position
-          setProperty(currentLocationEl, 'position', mapEl.components.map.project(long, lat));
-          setProperty(currentLocationEl, 'visible', true);
-
-          onLocationUpdate(lat, long, geomData.width, geomData.height);
-
-
-      });
-
-
-    </script>-->
 </body>
 
 </html>

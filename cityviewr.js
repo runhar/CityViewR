@@ -40,13 +40,31 @@ function addMarker(position, id) {
     return marker;
 }
 
-function fillMenuButton(vartext, id, number, type) {
+function fillMenuButton(vartext, id, number, type, key) {
     var buttontext = document.getElementById('menutext' + number);
+    var buttonpanel = document.getElementById('menupanel' + number);
+    var buttonselect = document.getElementById('menuselect' + number);
+    if (type == 'Topic'){
+      vartext = '- ' + vartext;
+      buttonselect.setAttribute('visible', true);
+      buttonselect.setAttribute('select', id);
+      buttonpanel.setAttribute('submenu', 'noAction');//because fuse triggers submenu rapidly
+      console.log(key);
+      console.log(queryData);
+      console.log(queryData.indexOf(key));
+      if (queryData.indexOf(key) > -1){
+        buttonselect.setAttribute('material', 'src: #checked;side:double;');
+      } else {
+        buttonselect.setAttribute('material', 'src: #unchecked;side:double;');
+      }
+    } else {
+      buttonselect.setAttribute('visible', false);
+      buttonpanel.setAttribute('submenu', id);
+    }
     var str = 'color:white'.concat('; text: ', vartext.replace(';', '-'), ';');
     buttontext.setAttribute('bmfont-text', str);
     buttontext.setAttribute('visible', true);
-    var buttonpanel = document.getElementById('menupanel' + number);
-    buttonpanel.setAttribute('submenu', id);
+    //buttonpanel.setAttribute('submenu', id);
     if (type == 'TopicGroup') {
         buttonpanel.setAttribute('opacity', .8);
         buttonpanel.setAttribute('color', 'lightslategray');
@@ -84,6 +102,18 @@ function addVarButton(vartext, classname, id, count) {
     menuPanel.setAttribute('color', 'gray');
     menuPanel.setAttribute('position', "1.4 0.08 -0.01");
     menuPanel.setAttribute('submenu', id);
+    var menuSelect = document.createElement('a-entity');
+    menuSelect.setAttribute('geometry', 'primitive: plane; width:0.15;height:0.15;');
+    menuSelect.setAttribute('class', 'menuselect');
+    menuSelect.setAttribute('id', 'menuselect' + count);
+    //menuSelect.setAttribute('width', '0.15');
+    //menuSelect.setAttribute('height', '0.15');
+    menuSelect.setAttribute('color', 'black');
+    menuSelect.setAttribute('position', "-1.4 0 0.02");
+    menuSelect.setAttribute('material', 'src:#unchecked');
+    menuSelect.setAttribute('submenu', id);
+    menuSelect.setAttribute('visible', false);
+    menuPanel.appendChild(menuSelect);
     button.appendChild(menuPanel);
     selection_panel.appendChild(button);
     return button;
@@ -101,6 +131,7 @@ function get_CBS_varnames() {
             menuLookup = {};
             for (var i = 0, len = variables.length; i < len; i++) {
                 menuLookup[variables[i].ID] = variables[i];
+                varTitleLookup[variables[i].Key] = variables[i].Title;
             }
             //create array where categories have children instead of a parent
             variables = variables.reduce(function(map, node) {
@@ -160,6 +191,7 @@ function onLocationUpdate(lat, long, width, height) {
             district.long = district.center['geometry']['coordinates'][0];
             district.lat = district.center['geometry']['coordinates'][1];
             district.id = response['features'][i]['properties']['WK_CODE'];
+            district.name = response['features'][i]['properties']['WK_NAAM'];
             district.marker = addMarker({
                 x: 0,
                 y: 0,
@@ -195,10 +227,13 @@ function onLocationUpdate(lat, long, width, height) {
 
 function setBars(data, max){
     dataLookup = {};
+    console.log(menuLookup.length);
     for (var i = 0, len = data.length; i < len; i++) {
-        dataLookup[data[i]['WijkenEnBuurten'].trim()] = data[i];
+      var district = data[i]['WijkenEnBuurten'].trim();
+        dataLookup[district] = data[i];
     }
-  console.log(dataLookup);
+
+
   nrOfItems = Object.keys(data[0]).length;
   var barColors = chroma.scale('YlOrBr').colors(nrOfItems-1);
   var vals = Object.keys(data).map(function(key) {
