@@ -28,6 +28,25 @@
     color: black;
   }
 
+  #selectioninfo {
+    width: 1024px;
+    height: 512px;
+    position: absolute;
+    background: rgba(255,255,0,0.3);
+    background: black;
+  }
+  #selectioninfo h1 {
+    font-family: Arial;
+    font-size: 12px;
+    margin: 5;
+    vertical-align: top;
+    color: white;
+  }
+
+
+  #selectioninfo h1 span {
+    color: black;
+  }
   #emoji {
     position: absolute;
     font-size: 512px;
@@ -46,6 +65,16 @@
   }
 
   #districtInfo {
+    font-family: Arial;
+    margin: 5;
+    padding: 2;
+    height: 14px;
+    font-size: 12px;
+    background: black;
+    color: white;
+  }
+
+  #CBSinfo {
     font-family: Arial;
     margin: 5;
     padding: 2;
@@ -119,6 +148,8 @@
         var menuLookup = {};
         var dataLookup = {};
         var varTitleLookup = {};
+        var cart = [];
+
 
         function find(array, id) {
             if (typeof array != 'undefined') {
@@ -198,14 +229,32 @@
             },
             init() {
               this.el.addEventListener('click', () => {
-              if (this.el.material == 'src: #checked;side:double;'){
-                this.el.setAttribute('material', 'src: #unchecked;side:double;');
-              } else {
-                this.el.setAttribute('material', 'src: #checked;side:double;');
-              }
-              console.log('clicked');
+              //find checkbox, same number
               var menuItem = menuLookup[this.data];
-              console.log(menuItem.Key);
+              var key = menuItem.Key;
+              IsSelected[key] = !IsSelected[key];
+              var checkbox = this.el.id.replace('panel','select');
+              checkbox = document.getElementById(checkbox);
+
+              if (cart.indexOf(key) == -1){
+                checkbox.setAttribute('material', 'src: #checked;side:double;');
+                cart.push(key);
+                } else {
+                checkbox.setAttribute('material', 'src: #unchecked;side:double;');
+                if (cart[cart.indexOf(key)] == key){
+                cart.splice(cart.indexOf(key),1);
+              }
+
+
+
+              }
+              console.log(cart);
+              var CBSinfo = document.getElementById('CBSinfo');
+              CBSinfo.innerHTML = '';
+              for (var i=0; i<cart.length;i++){
+                CBSinfo.innerHTML += '<li>' + varTitleLookup[cart[i]] + '</li>';
+              }
+              console.log(CBSinfo.innerHTML);
             });
           }
         });
@@ -238,13 +287,19 @@
           <span id="pre">Amsterdam</span>
           <div id="districtInfo"> </div>
         </div>
+        <div id="selectioninfo">
+          <h1>Selected variables</h1>
+          <span id="CBS">CBS data</span>
+          <div id="CBSinfo"> </div>
+        </div>
       </a-assets>
         <a-map width="7" height="4" position="0 0 -1" rotation="-90 0 0">
             <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.01"></a-sphere>
         </a-map>
 
-        <a-plane id="selection_panel" color="black" position="-1.5 1 .6" rotation="-30 45 0" width="1.3" height="1" visible="true">
+        <a-plane id="selection_panel" color="black" position="-1.5 .7 1" rotation="-30 45 0" width="1.3" height="1" visible="true">
         </a-plane>
+        <a-entity id="selection_screen" geometry="primitive:plane;width:1;height:0.6;" rotation="0 45 0" position="-1.75 1.5 .8" htmltexture="asset: #selectioninfo"></a-entity>
 
         <a-entity id="infopanel" geometry="primitive:plane;width:4;height:2;" rotation="0 0 0" position="0 1.5 -4.5" htmltexture="asset: #target"></a-entity>
 
@@ -263,7 +318,7 @@
 
         <a-entity position="0 0 1">
             <a-camera look-controls wasd-controls>
-                <a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="750"></a-cursor>
+                <a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="1500"></a-cursor>
             </a-camera>
         </a-entity>
 

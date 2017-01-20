@@ -53,11 +53,12 @@ function fillMenuButton(vartext, id, number, type, key) {
       buttonselect.setAttribute('visible', true);
       buttonselect.setAttribute('selectvar', id);
       buttonselect.setAttribute('submenu', 'noAction');
-      buttonpanel.setAttribute('submenu', 'noAction');//because fuse triggers submenu rapidly
+      buttonpanel.setAttribute('submenu', 'noAction');
+      buttonpanel.setAttribute('selectvar', id);
       console.log(key);
       console.log(queryData);
       console.log(queryData.indexOf(key));
-      if (queryData.indexOf(key) > -1){
+      if (cart.indexOf(key) > -1){
         buttonselect.setAttribute('material', 'src: #checked;side:double;');
       } else {
         buttonselect.setAttribute('material', 'src: #unchecked;side:double;');
