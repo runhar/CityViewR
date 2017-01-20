@@ -186,16 +186,28 @@
                 this.el.setAttribute('transparent', true);
                 this.el.setAttribute('opacity', .85);
                 this.el.setAttribute('selected', false);
-
                 this.el.addEventListener('click', () => {
-
                     writeDistrictInfo(this.data);
-                    //console.log(dataLookup[this.data]['Marokko_19']);
-                    //districtInfo.innerHTML = districtCache[this.data]['name'];
-                    //console.log(districtInfo.innerHTML);
-                    //console.log( districtCache[this.data]['name']);
                 });
             }
+        });
+
+        AFRAME.registerComponent('selectvar', {
+            schema: {
+                default: ''
+            },
+            init() {
+              this.el.addEventListener('click', () => {
+              if (this.el.material == 'src: #checked;side:double;'){
+                this.el.setAttribute('material', 'src: #unchecked;side:double;');
+              } else {
+                this.el.setAttribute('material', 'src: #checked;side:double;');
+              }
+              console.log('clicked');
+              var menuItem = menuLookup[this.data];
+              console.log(menuItem.Key);
+            });
+          }
         });
 
         function writeDistrictInfo(id){

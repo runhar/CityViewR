@@ -2,7 +2,7 @@ var mapEl = document.querySelector('a-map');
 var currentLocationEl = document.querySelector('#current-location');
 var setProperty = window.AFRAME.utils.entity.setComponentProperty;
 var queryData = ['Marokko_19','NederlandseAntillenEnAruba_20','Suriname_21','Turkije_22','OverigNietWesters_23'];
-
+var menuHeaderColors = ['#393939', '#FF5A09', '#F3843E', '#FF9900', '#6E6E6E'];
 
 //http://opendata.cbs.nl/ODataApi/odata/83220NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten,Marokko_19,NederlandseAntillenEnAruba_20,Suriname_21,Turkije_22,OverigNietWesters_23
 //max = Object.keys(obj).reduce(function(m, k){ return obj[k] > m ? obj[k] : m }, -Infinity);
@@ -44,10 +44,15 @@ function fillMenuButton(vartext, id, number, type, key) {
     var buttontext = document.getElementById('menutext' + number);
     var buttonpanel = document.getElementById('menupanel' + number);
     var buttonselect = document.getElementById('menuselect' + number);
+    var menuHeaderColor = number;
+    if (menuHeaderColor > 4){
+      menuHeaderColor = 4;
+    }
     if (type == 'Topic'){
       vartext = '- ' + vartext;
       buttonselect.setAttribute('visible', true);
-      buttonselect.setAttribute('select', id);
+      buttonselect.setAttribute('selectvar', id);
+      buttonselect.setAttribute('submenu', 'noAction');
       buttonpanel.setAttribute('submenu', 'noAction');//because fuse triggers submenu rapidly
       console.log(key);
       console.log(queryData);
@@ -70,7 +75,8 @@ function fillMenuButton(vartext, id, number, type, key) {
         buttonpanel.setAttribute('color', 'lightslategray');
     } else if (type == 'Parent'){
       buttonpanel.setAttribute('opacity', .8);
-      buttonpanel.setAttribute('color', 'purple');
+      buttonpanel.setAttribute('color', menuHeaderColors[menuHeaderColor]);
+      //buttonpanel.setAttribute('color', 'purple');
     } else {
         buttonpanel.setAttribute('opacity', 0);
         buttonpanel.setAttribute('color', 'gray');
@@ -99,7 +105,12 @@ function addVarButton(vartext, classname, id, count) {
     menuPanel.setAttribute('id', 'menupanel' + count);
     menuPanel.setAttribute('width', '3');
     menuPanel.setAttribute('height', '0.2');
-    menuPanel.setAttribute('color', 'gray');
+    menuPanel.setAttribute('opacity', '0.8');
+    if (count == 0){
+      menuPanel.setAttribute('color', menuHeaderColors[0]);
+    } else {
+    menuPanel.setAttribute('color', 'lightslategray');
+  }
     menuPanel.setAttribute('position', "1.4 0.08 -0.01");
     menuPanel.setAttribute('submenu', id);
     var menuSelect = document.createElement('a-entity');
@@ -111,7 +122,7 @@ function addVarButton(vartext, classname, id, count) {
     menuSelect.setAttribute('color', 'black');
     menuSelect.setAttribute('position', "-1.4 0 0.02");
     menuSelect.setAttribute('material', 'src:#unchecked');
-    menuSelect.setAttribute('submenu', id);
+    menuSelect.setAttribute('selectvar', id);
     menuSelect.setAttribute('visible', false);
     menuPanel.appendChild(menuSelect);
     button.appendChild(menuPanel);
