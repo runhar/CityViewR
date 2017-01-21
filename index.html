@@ -223,6 +223,19 @@
             }
         });
 
+        AFRAME.registerComponent('action', {
+            schema: {
+                default: ''
+            },
+            init() {
+                this.el.addEventListener('click', () => {
+                  if (this.data == 'getdata'){
+                    get_CBS_data();
+                  }
+                });
+            }
+        });
+
         AFRAME.registerComponent('selectvar', {
             schema: {
                 default: ''
@@ -251,10 +264,14 @@
               console.log(cart);
               var CBSinfo = document.getElementById('CBSinfo');
               CBSinfo.innerHTML = '';
+              //var vartext = '';
               for (var i=0; i<cart.length;i++){
                 CBSinfo.innerHTML += '<li>' + varTitleLookup[cart[i]] + '</li>';
+                //vartext += '\n' + varTitleLookup[cart[i]];
               }
-              console.log(CBSinfo.innerHTML);
+              //var selectionScreen = document.getElementById('selection_screen');
+              //var str = 'color:white'.concat('; text: ', vartext.replace(';', '-'), ';');
+              //selectionScreen.setAttribute('bmfont-text', str);
             });
           }
         });
@@ -282,6 +299,7 @@
       <a-assets>
         <img id="checked" src="js/checked.jpg">
         <img id="unchecked" src="js/unchecked.jpg">
+          <img id="OK" src="img/OK.png">
         <div id="target">
           <h1>CityViewR</h1>
           <span id="pre">Amsterdam</span>
@@ -300,6 +318,7 @@
         <a-plane id="selection_panel" color="black" position="-1.5 .7 1" rotation="-30 45 0" width="1.3" height="1" visible="true">
         </a-plane>
         <a-entity id="selection_screen" geometry="primitive:plane;width:1;height:0.6;" rotation="0 45 0" position="-1.75 1.5 .8" htmltexture="asset: #selectioninfo"></a-entity>
+        <a-entity id="selection_action" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" action='getdata' rotation="0 45 0" position="-1.75 1.2 .8" material="src:#OK; side:front;"></a-entity>
 
         <a-entity id="infopanel" geometry="primitive:plane;width:4;height:2;" rotation="0 0 0" position="0 1.5 -4.5" htmltexture="asset: #target"></a-entity>
 

@@ -183,8 +183,28 @@ function get_CBS_varnames() {
         }
 
     }
-    xhr.open('GET', 'http://opendata.cbs.nl/ODataApi/odata/83220NED/DataProperties', true);
+    xhr.open('GET', 'http://opendata.cbs.nl/ODataApi/odata/83487NED/DataProperties', true);
     xhr.send(null);
+}
+
+function get_CBS_data() {
+    //Get data for items in cart
+    querystring = cart.join();
+    queryData = querystring.split(',');
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            console.log(JSON.parse(xhr.responseText));
+            var data = JSON.parse(xhr.responseText);
+            var max = Object.keys(data).reduce(function(m, k){ return data[k] > m ? data[k] : m }, -Infinity);
+            barsSet = setBars(data.value, max);
+            }
+
+        }
+
+        //console.log("http://opendata.cbs.nl/ODataApi/odata/83220NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring);
+        xhr.open('GET', "http://opendata.cbs.nl/ODataApi/odata/83487NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring, true);
+        xhr.send(null);
 }
 
 
@@ -232,25 +252,28 @@ function onLocationUpdate(lat, long, width, height) {
         loadJSON('data/default_data.json', function(response) {
             var data = JSON.parse(response);
             var max = Object.keys(data).reduce(function(m, k){ return data[k] > m ? data[k] : m }, -Infinity);
-            barsSet = setBars(data.value, max);
+            barsSet = setBars(data.value, queryData, max);
           });
     });
 }
 
 function setBars(data, max){
+    var bars = document.getElementsByClassName('bar');
+    for (var i=0; i<bars.length;i++){
+      bars[i].setAttribute('visible',false);
+    }
     dataLookup = {};
-    console.log(menuLookup.length);
+    console.log(queryData);
     for (var i = 0, len = data.length; i < len; i++) {
       var district = data[i]['WijkenEnBuurten'].trim();
         dataLookup[district] = data[i];
     }
-
-
   nrOfItems = Object.keys(data[0]).length;
   var barColors = chroma.scale('YlOrBr').colors(nrOfItems-1);
   var vals = Object.keys(data).map(function(key) {
 		return data[key];
 	});
+  console.log(vals);
   var heights = [];
   var barData = [];
   for (var i=0; i<data.length;i++) {
@@ -258,12 +281,13 @@ function setBars(data, max){
 		for (var j=1; j<nrOfItems;j++) {
       var barNr = j-1;
 			var val = vals[i][queryData[barNr]];
+      console.log(queryData[barNr]);
       var color = barColors[barNr];
 			heights.push(val);
 			barData.push({"district":wk.trim()+barNr,"value":val, 'color':color});
 		}
 	}
-
+  console.log(barData);
 	var maxBarValue = Math.max.apply(Math, heights);
   var allBars = document.getElementsByClassName('bar');
   for (var i=0; i<barData.length;i++){
@@ -281,7 +305,7 @@ function setBars(data, max){
 }
 
 function create_extra_markers(position, id) {
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 6; i++) {
         var barNr = i + 1;
         var posx = position.x + 0.03 + i * 0.03;
         var posy = position.y;
