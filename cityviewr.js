@@ -273,7 +273,6 @@ function setBars(data, max){
   var vals = Object.keys(data).map(function(key) {
 		return data[key];
 	});
-  console.log(vals);
   var heights = [];
   var barData = [];
   for (var i=0; i<data.length;i++) {
@@ -281,14 +280,12 @@ function setBars(data, max){
 		for (var j=1; j<nrOfItems;j++) {
       var barNr = j-1;
 			var val = vals[i][queryData[barNr]];
-      console.log(queryData[barNr]);
       var color = barColors[barNr];
 			heights.push(val);
 			barData.push({"district":wk.trim()+barNr,"value":val, 'color':color});
 		}
 	}
-  console.log(barData);
-	var maxBarValue = Math.max.apply(Math, heights);
+  var maxBarValue = Math.max.apply(Math, heights);
   var allBars = document.getElementsByClassName('bar');
   for (var i=0; i<barData.length;i++){
     var bar = document.getElementById(barData[i]['district']);
@@ -349,12 +346,48 @@ function addViveControls(){
   var cursor = document.getElementById('cursor');
   cursor.setAttribute('fuse', false);
 }
+
+function addParticles(){
+  // create the particle variables
+var particleCount = 1800,
+    particles = new THREE.Geometry(),
+    pMaterial = new THREE.ParticleBasicMaterial({
+      color: 0xFFFFFF,
+      size: 20
+    });
+
+// now create the individual particles
+for (var p = 0; p < particleCount; p++) {
+
+  // create a particle with random
+  // position values, -250 -> 250
+  var pX = Math.random() * 500 - 250,
+      pY = Math.random() * 500 - 250,
+      pZ = Math.random() * 500 - 250,
+      particle = new THREE.Vertex(
+        new THREE.Vector3(pX, pY, pZ)
+      );
+
+  // add it to the geometry
+  particles.vertices.push(particle);
+}
+
+// create the particle system
+var particleSystem = new THREE.ParticleSystem(
+    particles,
+    pMaterial);
+
+// add it to the scene
+var scene = document.getElementById('scene');
+scene.addChild(particleSystem);
+}
 //------------START------------------------------------------------------------
 
-if (AFRAME.utils.checkHeadsetConnected()){
-  addViveControls();
-}
+//if (AFRAME.utils.checkHeadsetConnected()){
+//  addViveControls();
+//}
 var menu = get_CBS_varnames();
+//addParticles();
 
 
 // Once the map is loaded

@@ -1,140 +1,139 @@
 <html>
 
 <head>
-      <meta charset="UTF-8">
-<style type="text/css">
-  #target {
-    width: 1024px;
-    height: 512px;
-    position: absolute;
-    background: rgba(255,255,0,0.3);
-    background: black;
-  }
+    <meta charset="UTF-8">
+    <style type="text/css">
+        #target {
+            width: 1024px;
+            height: 512px;
+            position: absolute;
+            background: rgba(255, 255, 0, 0.3);
+            background: black;
+        }
 
-  #htmlTarget.hide {
-    z-index: -1;
-  }
+        #htmlTarget.hide {
+            z-index: -1;
+        }
 
-  #target h1 {
-    font-family: Arial;
-    font-size: 16px;
-    margin: 5;
-    vertical-align: top;
-    color: white;
-  }
+        #target h1 {
+            font-family: Arial;
+            font-size: 16px;
+            margin: 5;
+            vertical-align: top;
+            color: white;
+        }
 
+        #target h1 span {
+            color: black;
+        }
 
-  #target h1 span {
-    color: black;
-  }
+        #selectioninfo {
+            width: 1024px;
+            height: 512px;
+            position: absolute;
+            background: rgba(255, 255, 0, 0.3);
+            background: black;
+        }
 
-  #selectioninfo {
-    width: 1024px;
-    height: 512px;
-    position: absolute;
-    background: rgba(255,255,0,0.3);
-    background: black;
-  }
-  #selectioninfo h1 {
-    font-family: Arial;
-    font-size: 12px;
-    margin: 5;
-    vertical-align: top;
-    color: white;
-  }
+        #selectioninfo h1 {
+            font-family: Arial;
+            font-size: 12px;
+            margin: 5;
+            vertical-align: top;
+            color: white;
+        }
 
+        #selectioninfo h1 span {
+            color: black;
+        }
 
-  #selectioninfo h1 span {
-    color: black;
-  }
-  #emoji {
-    position: absolute;
-    font-size: 512px;
-    color: mediumTurquoise;
-    font-style: serif;
-  }
+        #emoji {
+            position: absolute;
+            font-size: 512px;
+            color: mediumTurquoise;
+            font-style: serif;
+        }
 
-  #pre {
-    font-family: arial;
-    margin: 5;
-    padding: 0;
-    height: 14px;
-    font-size: 14px;
-    background: royalblue;
-    color: white;
-  }
+        #pre {
+            font-family: arial;
+            margin: 5;
+            padding: 0;
+            height: 14px;
+            font-size: 14px;
+            background: royalblue;
+            color: white;
+        }
 
-  #districtInfo {
-    font-family: Arial;
-    margin: 5;
-    padding: 2;
-    height: 14px;
-    font-size: 12px;
-    background: black;
-    color: white;
-  }
+        #districtInfo {
+            font-family: Arial;
+            margin: 5;
+            padding: 2;
+            height: 14px;
+            font-size: 12px;
+            background: black;
+            color: white;
+        }
 
-  #CBSinfo {
-    font-family: Arial;
-    margin: 5;
-    padding: 2;
-    height: 14px;
-    font-size: 12px;
-    background: black;
-    color: white;
-  }
+        #CBSinfo {
+            font-family: Arial;
+            margin: 5;
+            padding: 2;
+            height: 14px;
+            font-size: 12px;
+            background: black;
+            color: white;
+        }
 
-  #htmlTarget {
-    position: absolute;
-    z-index: 1;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-  }
+        #htmlTarget {
+            position: absolute;
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
 
-  #debug {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
+        #debug {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
 
-  @media (max-width: 512px) {
-    #target {
-      width: 256px;
-      height: 126px;
-    }
+        @media (max-width: 512px) {
+            #target {
+                width: 256px;
+                height: 126px;
+            }
+            #target h1 {
+                font-size: 55px;
+            }
+            #pre {
+                height: 50px;
+                font-size: 25px;
+            }
+            #emoji {
+                position: absolute;
+                font-size: 256px;
+                color: mediumTurquoise;
+            }
+        }
 
-    #target h1 {
-      font-size: 55px;
-    }
-
-    #pre {
-      height: 50px;
-      font-size: 25px;
-    }
-
-    #emoji {
-      position: absolute;
-      font-size: 256px;
-      color: mediumTurquoise;
-    }
-  }
-
-  body[data-vr="true"] .novr{
-    display: none;
-  }
-  </style>
+        body[data-vr="true"] .novr {
+            display: none;
+        }
+    </style>
     <title>CityViewR</title>
     <script src="js/aframe-map.js"></script>
     <script src="js/aframe-bmfont-text-component.js"></script>
-      <script src="js/aframe-vive-cursor-component.min.js"></script>
+    <script src="js/aframe-vive-cursor-component.min.js"></script>
     <script src="js/skyGradient.js"></script>
     <!--
     <script src="js/aframe-layout-component.min.js"></script>-->
     <script src="js/aframe-draw-component.min.js"></script>
     <!--<script src="js/aframe-html-shader.min.js"></script>-->
     <script src="js/aframe-htmltexture-component.min.js"></script>
-  <!--  <script src="js/aframe-fit-texture-component.min.js"></script>-->
+    <script src="js/aframe-instancing.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.2.0/dist/aframe-extras.min.js"></script>
+    <!--  <script src="js/aframe-fit-texture-component.min.js"></script>-->
 
     <!--<script src="js/aframe-textwrap-component.min.js"></script>-->
 
@@ -176,34 +175,34 @@
                 this.el.setAttribute('selected', false);
                 this.el.addEventListener('click', () => {
                     var menuButtons = document.getElementsByClassName('menubutton');
-                    if (this.data != 'noAction'){
-                    for (var i = 0; i < menuButtons.length; i++) {
-                        menuButtons[i].setAttribute('visible', false);
-                    }
-                    var menuItem = menuLookup[this.data];
-                    var parents = find(menuData, this.data);
-                    if (menuItem.ID == 999) {
-                        fillMenuButton(menuItem.Title, menuItem.ID, 0, 'Parent', '');
-                        var childItems = menuItem.children;
-                        for (var i = 0; i < childItems.length; i++) {
-                            var j = i + 1;
-                            fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type,childItems[i].Key);
-                        }
-                    } else {
-                        var level = parents.length;
-                        for (var i = 0; i < parents.length; i++) {
-                            var item = menuLookup[parents[i]];
-                            fillMenuButton(item.Title, item.ID, i, 'Parent', item.Key);
+                    if (this.data != 'noAction') {
+                        for (var i = 0; i < menuButtons.length; i++) {
+                            menuButtons[i].setAttribute('visible', false);
                         }
                         var menuItem = menuLookup[this.data];
-                        var childItems = menuItem.children;
-                        for (var i = 0; i < childItems.length; i++) {
-                            var j = i + level;
-                            fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type, childItems[i].Key);
+                        var parents = find(menuData, this.data);
+                        if (menuItem.ID == 999) {
+                            fillMenuButton(menuItem.Title, menuItem.ID, 0, 'Parent', '');
+                            var childItems = menuItem.children;
+                            for (var i = 0; i < childItems.length; i++) {
+                                var j = i + 1;
+                                fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type, childItems[i].Key);
+                            }
+                        } else {
+                            var level = parents.length;
+                            for (var i = 0; i < parents.length; i++) {
+                                var item = menuLookup[parents[i]];
+                                fillMenuButton(item.Title, item.ID, i, 'Parent', item.Key);
+                            }
+                            var menuItem = menuLookup[this.data];
+                            var childItems = menuItem.children;
+                            for (var i = 0; i < childItems.length; i++) {
+                                var j = i + level;
+                                fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type, childItems[i].Key);
+                            }
                         }
                     }
-                  }
-                    });
+                });
 
 
             }
@@ -229,9 +228,13 @@
             },
             init() {
                 this.el.addEventListener('click', () => {
-                  if (this.data == 'getdata'){
-                    get_CBS_data();
-                  }
+                    if (this.data == 'getdata') {
+                        get_CBS_data();
+                    } else if (this.data == 'cleardata') {
+                      cart = [];
+                      var CBSinfo = document.getElementById('CBSinfo');
+                      CBSinfo.innerHTML = '';
+                    }
                 });
             }
         });
@@ -241,54 +244,57 @@
                 default: ''
             },
             init() {
-              this.el.addEventListener('click', () => {
-              //find checkbox, same number
-              var menuItem = menuLookup[this.data];
-              var key = menuItem.Key;
-              IsSelected[key] = !IsSelected[key];
-              var checkbox = this.el.id.replace('panel','select');
-              checkbox = document.getElementById(checkbox);
+                this.el.addEventListener('click', () => {
+                    //find checkbox, same number
+                    var menuItem = menuLookup[this.data];
+                    var key = menuItem.Key;
+                    IsSelected[key] = !IsSelected[key];
+                    var checkbox = this.el.id.replace('panel', 'select');
+                    checkbox = document.getElementById(checkbox);
 
-              if (cart.indexOf(key) == -1){
-                checkbox.setAttribute('material', 'src: #checked;side:double;');
-                cart.push(key);
-                } else {
-                checkbox.setAttribute('material', 'src: #unchecked;side:double;');
-                if (cart[cart.indexOf(key)] == key){
-                cart.splice(cart.indexOf(key),1);
-              }
+                    if (cart.indexOf(key) == -1) {
+                        checkbox.setAttribute('material', 'src: #checked;side:double;');
+                        cart.push(key);
+                    } else {
+                        checkbox.setAttribute('material', 'src: #unchecked;side:double;');
+                        if (cart[cart.indexOf(key)] == key) {
+                            cart.splice(cart.indexOf(key), 1);
+                        }
 
 
 
-              }
-              console.log(cart);
-              var CBSinfo = document.getElementById('CBSinfo');
-              CBSinfo.innerHTML = '';
-              //var vartext = '';
-              for (var i=0; i<cart.length;i++){
-                CBSinfo.innerHTML += '<li>' + varTitleLookup[cart[i]] + '</li>';
-                //vartext += '\n' + varTitleLookup[cart[i]];
-              }
-              //var selectionScreen = document.getElementById('selection_screen');
-              //var str = 'color:white'.concat('; text: ', vartext.replace(';', '-'), ';');
-              //selectionScreen.setAttribute('bmfont-text', str);
-            });
-          }
+                    }
+                    var CBSinfo = document.getElementById('CBSinfo');
+                    CBSinfo.innerHTML = '';
+                    //var vartext = '';
+                    for (var i = 0; i < cart.length; i++) {
+                        CBSinfo.innerHTML += '<li>' + varTitleLookup[cart[i]] + '</li>';
+                        //vartext += '\n' + varTitleLookup[cart[i]];
+                    }
+                });
+            }
         });
 
-        function writeDistrictInfo(id){
-          var districtInfo = document.getElementById('districtInfo');
-          var district = document.getElementById('pre');
-          district.innerHTML =  'Amsterdam: '+ districtCache[id]['name'];
-          var str = '<table style="width:100%; background: black;">';
-          var barColors = chroma.scale('YlOrBr').colors(queryData.length);
-          for (var i=0; i<queryData.length;i++){
-            str = str + '<tr><td><span style="color:' + barColors[i] + '";>&#9632; </span><span style="color:white; font-size:12px;">' + varTitleLookup[queryData[i]] + ': </span></td>';
-            str = str + '<td><span style="color:white; font-size:12px";>' +dataLookup[id][queryData[i]] + '</span></td></tr>';
-          }
-          str = str + '</table>';
-          districtInfo.innerHTML = str;
-          console.log(varTitleLookup);
+        function writeDistrictInfo(id) {
+            var districtInfo = document.getElementById('districtInfo');
+            var district = document.getElementById('pre');
+            district.innerHTML = 'Amsterdam: ' + districtCache[id]['name'];
+            var str = '<table style="width:100%; background: black;">';
+            var barColors = chroma.scale('YlOrBr').colors(queryData.length);
+            for (var i = 0; i < queryData.length; i++) {
+                str = str + '<tr><td><span style="color:' + barColors[i] + '";>&#9632; </span><span style="color:white; font-size:12px;">' + varTitleLookup[queryData[i]] + ': </span></td>';
+                str = str + '<td><span style="color:white; font-size:12px";>' + dataLookup[id][queryData[i]] + '</span></td></tr>';
+            }
+            str = str + '</table>';
+            districtInfo.innerHTML = str;
+            var highlight = document.getElementById('highlight');
+            var bar = document.getElementById(id + 0);
+            var matrixWorld = bar.object3D.matrixWorld;
+            var position = new THREE.Vector3();
+            position.setFromMatrixPosition(matrixWorld);
+            position.y = 0.01;
+            highlight.setAttribute('position', position);
+            //console.log(varTitleLookup);
         }
     </script>
 </head>
@@ -296,36 +302,37 @@
 <body>
 
     <a-scene id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
-      <a-assets>
-        <img id="checked" src="js/checked.jpg">
-        <img id="unchecked" src="js/unchecked.jpg">
-          <img id="OK" src="img/OK.png">
-        <div id="target">
-          <h1>CityViewR</h1>
-          <span id="pre">Amsterdam</span>
-          <div id="districtInfo"> </div>
-        </div>
-        <div id="selectioninfo">
-          <h1>Selected variables</h1>
-          <span id="CBS">CBS data</span>
-          <div id="CBSinfo"> </div>
-        </div>
-      </a-assets>
+        <a-assets>
+            <img id="checked" src="js/checked.jpg">
+            <img id="unchecked" src="js/unchecked.jpg">
+            <img id="OK" src="img/OK.png">
+            <img id="clear" src="img/clear.png">
+            <div id="target">
+                <h1>CityViewR</h1>
+                <span id="pre">Amsterdam</span>
+                <div id="districtInfo"> </div>
+            </div>
+            <div id="selectioninfo">
+                <h1>Selected variables</h1>
+                <span id="CBS">CBS data</span>
+                <div id="CBSinfo"> </div>
+            </div>
+        </a-assets>
         <a-map width="7" height="4" position="0 0 -1" rotation="-90 0 0">
             <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.01"></a-sphere>
         </a-map>
 
+        <a-circle id="highlight" position="0 0.1 20" rotation="-90 0 0" radius="0.12" transparent="true" opacity="0.4" color="lightblue"></a-circle>
+
         <a-plane id="selection_panel" color="black" position="-1.5 .7 1" rotation="-30 45 0" width="1.3" height="1" visible="true">
         </a-plane>
         <a-entity id="selection_screen" geometry="primitive:plane;width:1;height:0.6;" rotation="0 45 0" position="-1.75 1.5 .8" htmltexture="asset: #selectioninfo"></a-entity>
-        <a-entity id="selection_action" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" action='getdata' rotation="0 45 0" position="-1.75 1.2 .8" material="src:#OK; side:front;"></a-entity>
-
+        <a-entity rotation="0 45 0" position="-1.75 1.2 .8">
+          <a-entity id="selection_OK" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='0.3 -0.05 0' action='getdata'  material="src:#OK; side:front;"></a-entity>
+          <a-entity id="selection_clear" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='-0.3 -0.05 0' action='cleardata'  material="src:#clear; side:front;"></a-entity>
+        </a-entity>
         <a-entity id="infopanel" geometry="primitive:plane;width:4;height:2;" rotation="0 0 0" position="0 1.5 -4.5" htmltexture="asset: #target"></a-entity>
 
-        <!--
-        <a-entity vive-controls="hand: left" vive-cursor></a-entity>
-        <a-entity vive-controls="hand: right" vive-cursor></a-entity>
-      -->
         <a-light position="-1 5 0"></a-light>
         <a-light type="point" position="1 1 -0.37" intensity=".5"></a-light>
         <a-light type="point" position="0 2 -1.7" intensity=".5"></a-light>
@@ -334,13 +341,14 @@
 
         <!--<a-sky color="#fff"></a-sky>-->
         <a-entity id="sky" geometry="primitive: sphere; radius: 50;" material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
-
-        <a-entity position="0 0 1">
-            <a-camera look-controls wasd-controls>
-                <a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="1500"></a-cursor>
-            </a-camera>
-        </a-entity>
-
+        <script>
+            if (!AFRAME.utils.isMobile() && AFRAME.utils.checkHeadsetConnected()) {
+                document.write('<a-entity position="0 0 1"><a-camera></a-camera></a-entity><a-entity vive-controls="hand: left" vive-cursor></a-entity><a-entity vive-controls="hand: right" vive-cursor></a-entity>');
+            } else {
+                document.write('<a-entity position="0 0 1"><a-camera look-controls wasd-controls><a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="1500"></a-cursor></a-camera></a-entity>');
+            }
+        </script>
+<a-entity  position = "0 1 0 "  instancing="count:4000"></a-entity>
     </a-scene>
 
 
@@ -352,10 +360,6 @@
     <script src="js/geojson-vt.js"></script>
     <script src="https://npmcdn.com/@turf/turf@3.5.1/turf.min.js" charset="utf-8"></script>
     <script src="style.js"></script>
-    <!--
-	<script src="https://rawgit.com/ngokevin/aframe-animation-component/master/dist/aframe-animation-component.min.js"></script> 
-  <script src="https://rawgit.com/gmarty/aframe-ui-components/master/dist/aframe-ui-components.min.js"></script> 
--->
     <script src="cityviewr.js"></script>
 
 
