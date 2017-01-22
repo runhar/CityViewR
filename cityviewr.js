@@ -347,47 +347,122 @@ function addViveControls(){
   cursor.setAttribute('fuse', false);
 }
 
-function addParticles(){
-  // create the particle variables
-var particleCount = 1800,
-    particles = new THREE.Geometry(),
-    pMaterial = new THREE.ParticleBasicMaterial({
-      color: 0xFFFFFF,
-      size: 20
-    });
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                console.log(allText);
+                 lines = processData(allText);
 
-// now create the individual particles
-for (var p = 0; p < particleCount; p++) {
 
-  // create a particle with random
-  // position values, -250 -> 250
-  var pX = Math.random() * 500 - 250,
-      pY = Math.random() * 500 - 250,
-      pZ = Math.random() * 500 - 250,
-      particle = new THREE.Vertex(
-        new THREE.Vector3(pX, pY, pZ)
-      );
-
-  // add it to the geometry
-  particles.vertices.push(particle);
+            }
+        }
+    }
+    rawFile.send(null);
 }
 
-// create the particle system
-var particleSystem = new THREE.ParticleSystem(
-    particles,
-    pMaterial);
 
-// add it to the scene
-var scene = document.getElementById('scene');
-scene.addChild(particleSystem);
+function processData(csv) {
+    //var newcsv = csv.replace(/,/g, '.')//dutch csv files have comma instead of dot
+    var allTextLines = csv.split(/\r\n|\n/);
+    var lines = [];
+    var worldpoints = [];
+    var colors = [];
+    var colorscale = chroma.scale(['green','red']);
+    while (allTextLines.length) {
+        lines.push(allTextLines.shift().split(';'));
+    }
+    var maxvalue = -Infinity;
+    for (var i=1;i<lines.length;i++){
+      if (lines[i][2] > maxvalue){
+        maxvalue = lines[i][2];
+      }
+    }
+	for (var i=1;i<lines.length;i++){
+    if (lines[i][0] != undefined && lines[i][1] != undefined){
+    var lnglat = mapEl.components.map.project(lines[i][0], lines[i][1]);
+  }
+    lnglat.z = parseFloat(lines[i][2])/maxvalue;
+    var color = colorscale(lnglat.z);
+    color = chroma(color).gl();
+    colors.push(color);
+    lnglat.z = lnglat.z + 0.5;
+    worldpoints.push(lnglat);
+  }
+	console.log(worldpoints);
+  otherdata = worldpoints;
+  createDataSetPoints(otherdata, colors);
+  return worldpoints;
+
 }
+
+function createDataSetPoints(data, colors){
+  var el = document.getElementById('dataset');
+
+  var count = data.length;
+
+  var geometry = new THREE.InstancedBufferGeometry();
+  geometry.copy(new THREE.SphereBufferGeometry(.006));
+
+  var translateArray = new Float32Array(count*3);
+  var vectorArray = new Float32Array(count*3);
+  var colorArray = new Float32Array(count*3);
+
+  for (var i = 0; i < count; i++) {
+    translateArray[i*3+0] = data[i].x;
+    translateArray[i*3+1] = data[i].y;
+    translateArray[i*3+2] = data[i].z;
+  }
+
+  for (var i = 0; i < count; i++) {
+    colorArray[i*3+0] = colors[i][0];
+    colorArray[i*3+1] = colors[i][1];
+    colorArray[i*3+2] = colors[i][2];
+  }
+
+  geometry.addAttribute('translate', new THREE.InstancedBufferAttribute(translateArray, 3, 1));
+  geometry.addAttribute('color', new THREE.InstancedBufferAttribute(colorArray, 3, 1));
+
+  var material = new THREE.ShaderMaterial({
+    uniforms: {
+      time: {value: 0}
+    },
+    vertexShader: [
+      'attribute vec3 translate;',
+      'attribute vec3 color;',
+      'uniform float time;',
+      'varying vec3 vColor;',
+      'void main() {',
+      '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position + translate, 1.0 );',
+      '  vColor = color;',
+'}'
+    ].join('\n'),
+    fragmentShader: [
+      'varying vec3 vColor;',
+      'void main() {',
+      '  gl_FragColor = vec4( vColor, 1.0 );',
+      '}'
+    ].join('\n')
+  });
+  var mesh = new THREE.Mesh(geometry, material);
+  el.setObject3D('mesh', mesh);
+//  el.emit('model-loaded', {format:'mesh', model: mesh});
+}
+
 //------------START------------------------------------------------------------
 
 //if (AFRAME.utils.checkHeadsetConnected()){
 //  addViveControls();
 //}
 var menu = get_CBS_varnames();
-//addParticles();
+
 
 
 // Once the map is loaded
@@ -395,7 +470,7 @@ var menu = get_CBS_varnames();
 mapEl.addEventListener('map-loaded', function() {
     mapEl.setAttribute('map', 'style', JSON.stringify(style));
     var geomData = mapEl.components.geometry.data;
-    //Amsterdam centre (TODO: get centre and zoom from geojson data)
+    //Amsterdam VRBase (TODO: get centre and zoom from geojson data)
     var long = 4.918273;
     var lat = 52.372523;
     // center the map on that location
@@ -406,4 +481,8 @@ mapEl.addEventListener('map-loaded', function() {
     setProperty(currentLocationEl, 'position', mapEl.components.map.project(long, lat));
     setProperty(currentLocationEl, 'visible', true);
     onLocationUpdate(lat, long, geomData.width, geomData.height);
+    var otherdataholder = readTextFile('data/EnergyPerformance.csv');
+
+    //<a-entity  position = "0 1 0 "  instancing="count:4000"></a-entity>
+
 });

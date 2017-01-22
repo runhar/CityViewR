@@ -85,9 +85,14 @@
 	    }
 
 	    for (var i = 0; i < count; i++) {
-	      vectorArray[i*3+0] = (Math.random() - 0.5) * 1;
-	      vectorArray[i*3+1] = (Math.random() + 1.5) * 1;
-	      vectorArray[i*3+2] = (Math.random() - 0.5) * 1;
+	      //vectorArray[i*3+0] = (Math.random() - 0.5) * 1;
+	      //vectorArray[i*3+1] = (Math.random() + 1.5) * 1;
+	      //vectorArray[i*3+2] = (Math.random() - 0.5) * 1;
+				vectorArray[i*3+0] = otherdata[i].x;
+	      vectorArray[i*3+1] = otherdata[i].y;
+	      vectorArray[i*3+2] = otherdata[i].z;
+				console.log('instancing in action');
+				console.log(otherdata[i]);
 	    }
 
 	    for (var i = 0; i < count; i++) {

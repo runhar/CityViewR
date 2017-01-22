@@ -133,6 +133,7 @@
     <script src="js/aframe-htmltexture-component.min.js"></script>
     <script src="js/aframe-instancing.js"></script>
     <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.2.0/dist/aframe-extras.min.js"></script>
+    <script src="js/read-csv.js"></script>
     <!--  <script src="js/aframe-fit-texture-component.min.js"></script>-->
 
     <!--<script src="js/aframe-textwrap-component.min.js"></script>-->
@@ -148,6 +149,7 @@
         var dataLookup = {};
         var varTitleLookup = {};
         var cart = [];
+        var otherdata = [];
 
 
         function find(array, id) {
@@ -348,7 +350,9 @@
                 document.write('<a-entity position="0 0 1"><a-camera look-controls wasd-controls><a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="1500"></a-cursor></a-camera></a-entity>');
             }
         </script>
-<a-entity  position = "0 1 0 "  instancing="count:4000"></a-entity>
+        <!--
+<a-entity  position = "0 1 0 "  instancing="count:4000"></a-entity>-->
+    <a-entity id='dataset' position="0 0 -1" rotation='-90 0 0'></a-entity>
     </a-scene>
 
 

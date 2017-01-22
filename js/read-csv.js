@@ -26,28 +26,15 @@ function processData(csv) {
     var allTextLines = csv.split(/\r\n|\n/);
     var lines = [];
     while (allTextLines.length) {
-        lines.push(allTextLines.shift().split(','));
+        lines.push(allTextLines.shift().split(';'));
     }
 	console.log(lines);
-	drawOutput(lines);
+	//drawOutput(lines);
+	return lines;
 }
 
 function errorHandler(evt) {
 	if(evt.target.error.name == "NotReadableError") {
 		alert("Canno't read file !");
 	}
-}
-
-function drawOutput(lines){
-	//Clear previous data
-	document.getElementById("output").innerHTML = "";
-	var table = document.createElement("table");
-	for (var i = 0; i < lines.length; i++) {
-		var row = table.insertRow(-1);
-		for (var j = 0; j < lines[i].length; j++) {
-			var firstNameCell = row.insertCell(-1);
-			firstNameCell.appendChild(document.createTextNode(lines[i][j]));
-		}
-	}
-	document.getElementById("output").appendChild(table);
 }
