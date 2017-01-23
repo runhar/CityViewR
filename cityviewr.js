@@ -132,6 +132,43 @@ function addVarButton(vartext, classname, id, count) {
 }
 
 
+function addOwnDataButton(vartext) {
+    var selection_panel = document.getElementById('selection_panel');
+    var button = document.createElement('a-entity');
+    var str = 'color:white'.concat('; text: ', vartext, ';');
+    button.setAttribute('bmfont-text', str);
+    button.setAttribute('class', 'owndatabutton');
+    button.setAttribute('id', 'owndatatext');
+    button.setAttribute('scale', " 0.4 0.4 0.4");
+    button.setAttribute('width', "1");
+    button.setAttribute('visible', true);
+    button.setAttribute('position', '-0.5 -0.5 0.01');
+    var menuPanel = document.createElement('a-plane');
+    menuPanel.setAttribute('class', 'owndatapanel');
+    menuPanel.setAttribute('id', 'owndatapanel');
+    menuPanel.setAttribute('width', '3.2');
+    menuPanel.setAttribute('height', '0.2');
+    menuPanel.setAttribute('opacity', '1');
+    menuPanel.setAttribute('color', 'black');
+    menuPanel.setAttribute('position', "1.4 0.08 -0.01");
+    menuPanel.setAttribute('action', 'toggleowndata');
+    var menuSelect = document.createElement('a-entity');
+    menuSelect.setAttribute('geometry', 'primitive: plane; width:0.15;height:0.15;');
+    menuSelect.setAttribute('class', 'owndataselect');
+    menuSelect.setAttribute('id', 'owndataselect');
+    //menuSelect.setAttribute('width', '0.15');
+    //menuSelect.setAttribute('height', '0.15');
+    menuSelect.setAttribute('color', 'black');
+    menuSelect.setAttribute('position', "-1.6 0 0.02");
+    menuSelect.setAttribute('material', 'src:#unchecked');
+    menuSelect.setAttribute('action', 'toggleowndata');
+    menuSelect.setAttribute('visible', true);
+    menuPanel.appendChild(menuSelect);
+    button.appendChild(menuPanel);
+    selection_panel.appendChild(button);
+    return button;
+}
+
 function get_CBS_varnames() {
     //Get data categories from CBS Open Data
     var xhr = new XMLHttpRequest();
@@ -178,7 +215,7 @@ function get_CBS_varnames() {
             for (var i = 0; i < menuData[0]['children'].length; i++) {
                 button = addVarButton(menuData[0]['children'][i].Title, 'CBStopcat', menuData[0]['children'][i].ID, i + 1);
             }
-
+            var owndatabutton = addOwnDataButton('Own data: EnergyPerformance.csv');
 
         }
 

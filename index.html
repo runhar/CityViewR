@@ -43,16 +43,14 @@
             color: white;
         }
 
-        #selectioninfo h1 span {
-            color: black;
+        #selectioninfo span {
+          font-family: Arial;
+          font-size: 10px;
+          margin: 5;
+          vertical-align: top;
+          color: white;
         }
 
-        #emoji {
-            position: absolute;
-            font-size: 512px;
-            color: mediumTurquoise;
-            font-style: serif;
-        }
 
         #pre {
             font-family: arial;
@@ -100,22 +98,17 @@
 
         @media (max-width: 512px) {
             #target {
-                width: 256px;
-                height: 126px;
+                width: 512px;
+                height: 256px;
             }
             #target h1 {
-                font-size: 55px;
+                font-size: 16px;
             }
             #pre {
-                height: 50px;
-                font-size: 25px;
+                height: 20px;
+                font-size: 12px;
             }
-            #emoji {
-                position: absolute;
-                font-size: 256px;
-                color: mediumTurquoise;
-            }
-        }
+          }
 
         body[data-vr="true"] .novr {
             display: none;
@@ -233,9 +226,19 @@
                     if (this.data == 'getdata') {
                         get_CBS_data();
                     } else if (this.data == 'cleardata') {
-                      cart = [];
-                      var CBSinfo = document.getElementById('CBSinfo');
-                      CBSinfo.innerHTML = '';
+                        cart = [];
+                        var CBSinfo = document.getElementById('CBSinfo');
+                        CBSinfo.innerHTML = '';
+                    } else if (this.data == 'toggleowndata') {
+                       var dataset = document.getElementById('dataset');
+                       console.log('own data clicked');
+                       dataset.setAttribute('visible', !dataset.getAttribute('visible'));
+                       var owndataselect = document.getElementById('owndataselect');
+                       if (dataset.getAttribute('visible') == true) {
+                         owndataselect.setAttribute('material', 'src: #checked;side:double;');
+                       } else {
+                         owndataselect.setAttribute('material', 'src: #unchecked;side:double;');
+                       }
                     }
                 });
             }
@@ -309,6 +312,7 @@
             <img id="unchecked" src="js/unchecked.jpg">
             <img id="OK" src="img/OK.png">
             <img id="clear" src="img/clear.png">
+            <img id="owndata" src="img/owndata.png">
             <div id="target">
                 <h1>CityViewR</h1>
                 <span id="pre">Amsterdam</span>
@@ -327,12 +331,12 @@
         <a-circle id="highlight" position="0 0.1 20" rotation="-90 0 0" radius="0.12" transparent="true" opacity="0.4" color="lightblue"></a-circle>
 
         <a-plane id="selection_panel" color="black" position="-1.5 .7 1" rotation="-30 45 0" width="1.3" height="1" visible="true">
-        </a-plane>
+          </a-plane>
         <a-entity id="selection_screen" geometry="primitive:plane;width:1;height:0.6;" rotation="0 45 0" position="-1.75 1.5 .8" htmltexture="asset: #selectioninfo"></a-entity>
         <a-entity rotation="0 45 0" position="-1.75 1.2 .8">
-          <a-entity id="selection_OK" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='0.3 -0.05 0' action='getdata'  material="src:#OK; side:front;"></a-entity>
-          <a-entity id="selection_clear" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='-0.3 -0.05 0' action='cleardata'  material="src:#clear; side:front;"></a-entity>
-        </a-entity>
+            <a-entity id="selection_OK" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='0.3 -0.05 0' action='getdata' material="src:#OK; side:front;"></a-entity>
+            <a-entity id="selection_clear" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='-0.3 -0.05 0' action='cleardata' material="src:#clear; side:front;"></a-entity>
+          </a-entity>
         <a-entity id="infopanel" geometry="primitive:plane;width:4;height:2;" rotation="0 0 0" position="0 1.5 -4.5" htmltexture="asset: #target"></a-entity>
 
         <a-light position="-1 5 0"></a-light>
@@ -352,7 +356,7 @@
         </script>
         <!--
 <a-entity  position = "0 1 0 "  instancing="count:4000"></a-entity>-->
-    <a-entity id='dataset' position="0 0 -1" rotation='-90 0 0'></a-entity>
+        <a-entity id='dataset' position="0 0 -1" rotation="-90 0 0" visible="false"></a-entity>
     </a-scene>
 
 
