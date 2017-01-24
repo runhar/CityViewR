@@ -220,7 +220,7 @@ function get_CBS_varnames() {
         }
 
     }
-    xhr.open('GET', 'http://opendata.cbs.nl/ODataApi/odata/83487NED/DataProperties', true);
+    xhr.open('GET', 'https://opendata.cbs.nl/ODataApi/odata/83487NED/DataProperties', true);
     xhr.send(null);
 }
 
@@ -240,7 +240,7 @@ function get_CBS_data() {
         }
 
         //console.log("http://opendata.cbs.nl/ODataApi/odata/83220NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring);
-        xhr.open('GET', "http://opendata.cbs.nl/ODataApi/odata/83487NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring, true);
+        xhr.open('GET', "https://opendata.cbs.nl/ODataApi/odata/83487NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring, true);
         xhr.send(null);
 }
 
