@@ -1,0 +1,434 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Mobile Specific Metas
+ –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+ –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <!-- JS
+ –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <!--<script src="js/datajs-1.1.2.min.js"></script>-->
+
+    <!-- CSS
+ –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/skeleton.css" />
+    <style type="text/css">
+        #target {
+            width: 1024px;
+            height: 512px;
+            position: absolute;
+            background: rgba(255, 255, 0, 0.3);
+            background: black;
+        }
+
+        #htmlTarget.hide {
+            z-index: -1;
+        }
+
+        #target h1 {
+            font-family: Arial;
+            font-size: 16px;
+            margin: 5;
+            vertical-align: top;
+            color: white;
+        }
+
+        #target h1 span {
+            color: black;
+        }
+
+        #selectioninfo {
+            width: 800px;
+            height: 600px;
+            position: absolute;
+            background: rgba(255, 255, 0, 0.3);
+            background: black;
+        }
+
+        #selectioninfo h1 {
+            font-family: Arial;
+            font-size: 16px;
+            margin: 5;
+            vertical-align: top;
+            color: white;
+        }
+
+        #selectioninfo span {
+            font-family: Arial;
+            font-size: 10px;
+            margin: 5;
+            vertical-align: top;
+            color: white;
+        }
+
+        #pre {
+            font-family: arial;
+            margin: 5;
+            padding: 0;
+            height: 14px;
+            font-size: 14px;
+            background: royalblue;
+            color: white;
+        }
+
+        #districtInfo {
+            font-family: Arial;
+            margin: 5;
+            padding: 2;
+            height: 14px;
+            font-size: 12px;
+            background: black;
+            color: white;
+        }
+
+        #CBSinfo {
+            font-family: Arial;
+            margin: 5;
+            padding: 2;
+            height: 14px;
+            font-size: 12px;
+            background: black;
+            color: white;
+        }
+
+        #htmlTarget {
+            position: absolute;
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #debug {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        @media (max-width: 512px) {
+            #target {
+                width: 512px;
+                height: 256px;
+            }
+            #target h1 {
+                font-size: 16px;
+            }
+            #pre {
+                height: 20px;
+                font-size: 12px;
+            }
+        }
+
+        body[data-vr="true"] .novr {
+            display: none;
+        }
+    </style>
+    <title>CityViewR</title>
+    <script src="js/aframe-map.js"></script>
+    <script src="js/aframe-bmfont-text-component.js"></script>
+    <script src="js/aframe-vive-cursor-component.min.js"></script>
+    <script src="js/skyGradient.js"></script>
+    <!--
+    <script src="js/aframe-layout-component.min.js"></script>-->
+    <script src="js/aframe-draw-component.min.js"></script>
+    <!--<script src="js/aframe-html-shader.min.js"></script>-->
+    <script src="js/aframe-htmltexture-component.min.js"></script>
+    <script src="js/aframe-instancing.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.2.0/dist/aframe-extras.min.js"></script>
+    <!--  <script src="js/aframe-fit-texture-component.min.js"></script>-->
+
+    <!--<script src="js/aframe-textwrap-component.min.js"></script>-->
+
+    <script>
+        //  var venueCache = {};
+        var districtCache = {};
+        var CBSvarCache = {};
+        var IsSelected = {};
+        var variables = [];
+        var menuData = [];
+        var menuLookup = {};
+        var dataLookup = {};
+        var varTitleLookup = {};
+        var cart = [];
+        var otherdata = [];
+
+
+        function find(array, id) {
+            if (typeof array != 'undefined') {
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i].ID == id) return [id];
+                    var a = find(array[i].children, id);
+                    if (a != null) {
+                        a.unshift(array[i].ID);
+                        return a;
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        AFRAME.registerComponent('submenu', {
+            schema: {
+                default: ''
+            },
+            init() {
+                this.el.setAttribute('transparent', true);
+                this.el.setAttribute('opacity', 0.2);
+                this.el.setAttribute('selected', false);
+                this.el.addEventListener('click', () => {
+                    var menuButtons = document.getElementsByClassName('menubutton');
+                    if (this.data != 'noAction') {
+                        for (var i = 0; i < menuButtons.length; i++) {
+                            menuButtons[i].setAttribute('visible', false);
+                        }
+                        var menuItem = menuLookup[this.data];
+                        var parents = find(menuData, this.data);
+                        if (menuItem.ID == 999) {
+                            fillMenuButton(menuItem.Title, menuItem.ID, 0, 'Parent', '');
+                            var childItems = menuItem.children;
+                            for (var i = 0; i < childItems.length; i++) {
+                                var j = i + 1;
+                                fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type, childItems[i].Key);
+                            }
+                        } else {
+                            var level = parents.length;
+                            for (var i = 0; i < parents.length; i++) {
+                                var item = menuLookup[parents[i]];
+                                fillMenuButton(item.Title, item.ID, i, 'Parent', item.Key);
+                            }
+                            var menuItem = menuLookup[this.data];
+                            var childItems = menuItem.children;
+                            for (var i = 0; i < childItems.length; i++) {
+                                var j = i + level;
+                                fillMenuButton(childItems[i].Title, childItems[i].ID, j, childItems[i].Type, childItems[i].Key);
+                            }
+                        }
+                    }
+                });
+
+
+            }
+        });
+
+        AFRAME.registerComponent('bar', {
+            schema: {
+                default: ''
+            },
+            init() {
+                this.el.setAttribute('transparent', true);
+                this.el.setAttribute('opacity', .85);
+                this.el.setAttribute('selected', false);
+                this.el.addEventListener('click', () => {
+                    writeDistrictInfo(this.data);
+                });
+            }
+        });
+
+        AFRAME.registerComponent('action', {
+            schema: {
+                default: ''
+            },
+            init() {
+                this.el.addEventListener('click', () => {
+                    if (this.data == 'getdata') {
+                        get_CBS_data();
+                    } else if (this.data == 'cleardata') {
+                        cart = [];
+                        var CBSinfo = document.getElementById('CBSinfo');
+                        CBSinfo.innerHTML = '';
+                    } else if (this.data == 'toggleowndata') {
+                        var dataset = document.getElementById('dataset');
+                        console.log('own data clicked');
+                        dataset.setAttribute('visible', !dataset.getAttribute('visible'));
+                        var owndataselect = document.getElementById('owndataselect');
+                        if (dataset.getAttribute('visible') == true) {
+                            owndataselect.setAttribute('material', 'src: #checked;side:double;');
+                        } else {
+                            owndataselect.setAttribute('material', 'src: #unchecked;side:double;');
+                        }
+                    }
+                });
+            }
+        });
+
+        AFRAME.registerComponent('selectvar', {
+            schema: {
+                default: ''
+            },
+            init() {
+                this.el.addEventListener('click', () => {
+                    //find checkbox, same number
+                    var menuItem = menuLookup[this.data];
+                    var key = menuItem.Key;
+                    IsSelected[key] = !IsSelected[key];
+                    var checkbox = this.el.id.replace('panel', 'select');
+                    checkbox = document.getElementById(checkbox);
+
+                    if (cart.indexOf(key) == -1) {
+                        checkbox.setAttribute('material', 'src: #checked;side:double;');
+                        cart.push(key);
+                    } else {
+                        checkbox.setAttribute('material', 'src: #unchecked;side:double;');
+                        if (cart[cart.indexOf(key)] == key) {
+                            cart.splice(cart.indexOf(key), 1);
+                        }
+
+
+
+                    }
+                    var CBSinfo = document.getElementById('CBSinfo');
+                    CBSinfo.innerHTML = '';
+                    //var vartext = '';
+                    for (var i = 0; i < cart.length; i++) {
+                        CBSinfo.innerHTML += '<li>' + varTitleLookup[cart[i]] + '</li>';
+                        //vartext += '\n' + varTitleLookup[cart[i]];
+                    }
+                });
+            }
+        });
+
+        function writeDistrictInfo(id) {
+            var districtInfo = document.getElementById('districtInfo');
+            var district = document.getElementById('pre');
+            district.innerHTML = 'Amsterdam: ' + districtCache[id]['name'];
+            var str = '<table style="width:100%; background: black;">';
+            var barColors = chroma.scale('YlOrBr').colors(queryData.length);
+            for (var i = 0; i < queryData.length; i++) {
+                str = str + '<tr><td><span style="color:' + barColors[i] + '";>&#9632; </span><span style="color:white; font-size:12px;">' + varTitleLookup[queryData[i]] + ': </span></td>';
+                str = str + '<td><span style="color:white; font-size:12px; float:right;";>' + dataLookup[id][queryData[i]] + '</span></td></tr>';
+            }
+            str = str + '</table>';
+            districtInfo.innerHTML = str;
+            var highlight = document.getElementById('highlight');
+            var bar = document.getElementById(id + 0);
+            var matrixWorld = bar.object3D.matrixWorld;
+            var position = new THREE.Vector3();
+            position.setFromMatrixPosition(matrixWorld);
+            position.y = 0.01;
+            highlight.setAttribute('position', position);
+            //console.log(varTitleLookup);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div id="intro" class="twelve columns" style="margin-top: 5%">
+                <h3>CityViewR</h3>
+                <p>Primarily aimed at decision-makers and data-analists, <b>CityViewR</b> combines
+                the best of the Web and VR. It uses open data to collect low regional statistical data which
+                 users can combine with their own data. CityViewR presents these data in an immersive room-size setting, so
+                 you can view these data in new ways, which hopefully leads to a better insight in city developments,
+        and in turn to more evidence-based policy making. Fact-based politics. One can dream, right?...</p>
+        <h4>About the demo</h4>
+        <p>The demo presents data about Amsterdam. This city was mainly chosen because the winner of the Virtuleap
+          Hackathon will get a spot there (try find the blue dot!). Data on city district level ('wijk' in Dutch)
+          come from the OData service of CBS, the national statistical institute. Because data are loaded in real-time,
+          all variable labels are in Dutch. Some explanation: by default, the first view will show the distribution of migrant groups
+          (first and second generation) across the city. Clicking on bars will show the statistical figures. Data are from 2016, so some of the categories don't yet
+          have actual data. To show that CityViewR can also deal with microdata, I prepared a synthetic dataset
+          derived from an open data source on energy labels. Click 'own data' to view more than 4.000 values (green correlates with low
+          energy consumption, red with high energy consumption). Read from a csv file containing latitude, longitude and values.
+          Best viewed with HTC Vive in the experimental Chromium VR browser.</p>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="sceneholder" class="twelve columns" style="margin-top: 5%">
+                <a-scene embedded id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
+                    <a-assets>
+                        <img id="checked" src="js/checked.jpg">
+                        <img id="unchecked" src="js/unchecked.jpg">
+                        <img id="OK" src="img/OK.png">
+                        <img id="clear" src="img/clear.png">
+                        <img id="owndata" src="img/owndata.png">
+                        <div id="target">
+                            <h1>CityViewR</h1>
+                            <span id="pre">Amsterdam</span>
+                            <div id="districtInfo"> </div>
+                        </div>
+                        <div id="selectioninfo">
+                            <h1>Selected  variables</h1>
+                            <span id="CBS">CBS data</span>
+                            <div id="CBSinfo"> </div>
+                        </div>
+                    </a-assets>
+                    <a-map width="5.12" height="5.12" pxToWorldRatio="100" position="0 0 -1" rotation="-90 0 0">
+                        <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.01"></a-sphere>
+                    </a-map>
+
+                    <a-circle id="highlight" position="0 0.1 20" rotation="-90 0 0" radius="0.12" transparent="true" opacity="0.4" color="lightblue"></a-circle>
+
+                    <a-plane id="selection_panel" color="black" position="-1.5 .7 1" rotation="-30 45 0" width="1.3" height="1" visible="true">
+                    </a-plane>
+                    <a-entity id="selection_screen" geometry="primitive:plane;width:1;height:0.6;" rotation="0 45 0" position="-1.75 1.5 .8" htmltexture="asset: #selectioninfo"></a-entity>
+                    <a-entity rotation="0 45 0" position="-1.75 1.2 .8">
+                        <a-entity id="selection_OK" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='0.3 -0.05 0' action='getdata' material="src:#OK; side:front;"></a-entity>
+                        <a-entity id="selection_clear" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='-0.3 -0.05 0' action='cleardata' material="src:#clear; side:front;"></a-entity>
+                    </a-entity>
+                    <a-entity id="infopanel" geometry="primitive:plane;width:4;height:2;" rotation="0 0 0" position="0 1.5 -4.5" htmltexture="asset: #target"></a-entity>
+
+                    <a-light position="-1 5 0"></a-light>
+                    <a-light type="point" position="1 1 -0.37" intensity=".5"></a-light>
+                    <a-light type="point" position="0 2 -1.7" intensity=".5"></a-light>
+                    <a-light type="point" position="0 2 1.7" intensity=".5"></a-light>
+                    <a-light type="ambient" intensity=".4"></a-light>
+
+                    <!--<a-sky color="#fff"></a-sky>-->
+                    <a-entity id="sky" geometry="primitive: sphere; radius: 50;" material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
+                    <script>
+                        if (!AFRAME.utils.isMobile() && AFRAME.utils.checkHeadsetConnected()) {
+                            document.write('<a-entity position="0 0 1"><a-camera></a-camera></a-entity><a-entity vive-controls="hand: left" vive-cursor></a-entity><a-entity vive-controls="hand: right" vive-cursor></a-entity>');
+                        } else {
+                            document.write('<a-entity position="0 0 1"><a-camera look-controls wasd-controls><a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="1500"></a-cursor></a-camera></a-entity>');
+                        }
+                    </script>
+                    <!--
+<a-entity  position = "0 1 0 "  instancing="count:4000"></a-entity>-->
+                    <a-entity id='dataset' position="0 0 -1" rotation="-90 0 0" visible="false"></a-entity>
+                </a-scene>
+            </div>
+        </div>
+        <div class="row">
+          <div id= "footer" class="twelve columns" style="margin-top: 5%">
+            <h4>What's next?</h4>
+            <p>This is just a working prototype. CityViewR can easily be extended to encompass all Dutch municipalities,
+              and probably many other cities. Prerequisities are at the moment that there needs to be some GEOJSON information
+              available to map the data, and of course a data API. Future work will include:
+              <ul>
+                <li>a generic input procedure for adding own datasets</li>
+                <li>animation, to see how things develop over time</li>
+                <li>drill down to even more detailed regional information (neighbourhoods)</li>
+                <li>basic data manipulation (create categories, combine variables)</li>
+                <li>add zooming and rotating functionality</li>
+                <li>improve code, better user interaction, better performance on mobile devices etc. etc.</li>
+              </ul>
+            </p>
+            More information? Just send me an e-mail: <a href="mailto:info@cityviewr.nl">info@cityviewr.nl</a>
+          </div>
+        </div>
+    </div>
+
+
+    <script src="js/loadJSON.js"></script>
+    <script src="js/TweenMax.min.js"></script>
+    <script src="js/chroma.min.js"></script>
+    <script src="js/geturlparameters.js"></script>
+    <script src="js/geojson-vt.js"></script>
+    <script src="https://npmcdn.com/@turf/turf@3.5.1/turf.min.js" charset="utf-8"></script>
+    <script src="style.js"></script>
+    <script src="cityviewr.js"></script>
+
+
+</body>
+
+</html>
