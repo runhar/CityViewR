@@ -16,7 +16,7 @@
 
     <!-- CSS
  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <!--  <link rel="stylesheet" href="css/normalize.css" />
+    <!--  <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/skeleton.css" />-->
     <style type="text/css">
         #target {
@@ -182,7 +182,7 @@
                 this.el.setAttribute('transparent', true);
                 this.el.setAttribute('opacity', 0.2);
                 this.el.setAttribute('selected', false);
-                  
+
                 this.el.addEventListener('click', () => {
                     var menuButtons = document.getElementsByClassName('menubutton');
                     if (this.data != 'noAction') {
@@ -285,10 +285,16 @@
 
                     }
                     var CBSinfo = document.getElementById('CBSinfo');
-                    CBSinfo.innerHTML = '';
+                    var elements = document.getElementsByClassName('selection_screen_element');
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].setAttribute('visible', false);
+                    }
                     //var vartext = '';
                     for (var i = 0; i < cart.length; i++) {
-                        CBSinfo.innerHTML += '<li>' + varTitleLookup[cart[i]] + '</li>';
+                        var line = document.getElementById('selection_screen_firstcolumn' + i);
+                        var str = 'color:white'.concat('; text: ', varTitleLookup[cart[i]], ';');
+                        line.setAttribute('bmfont-text', str);
+                        line.setAttribute('visible', true)
                         //vartext += '\n' + varTitleLookup[cart[i]];
                     }
                 });
@@ -296,17 +302,24 @@
         });
 
         function writeDistrictInfo(id) {
-            var districtInfo = document.getElementById('districtInfo');
-            var district = document.getElementById('pre');
-            district.innerHTML = 'Amsterdam: ' + districtCache[id]['name'];
-            var str = '<table style="width:100%; background: black;">';
             var barColors = chroma.scale('YlOrBr').colors(queryData.length);
+            var subheader = document.getElementById('infopanel_subheader');
+            var subheaderstr = 'color:white'.concat('; text: ', 'Amsterdam: ' + districtCache[id]['name'], ';');
+            //var linestr = 'color:white'.concat('; text: ', 'Amsterdam' + i, ';');
+            subheader.setAttribute('bmfont-text', subheaderstr);
             for (var i = 0; i < queryData.length; i++) {
-                str = str + '<tr><td><span style="color:' + barColors[i] + '";>&#9632; </span><span style="color:white; font-size:12px;">' + varTitleLookup[queryData[i]] + ': </span></td>';
-                str = str + '<td><span style="color:white; font-size:12px; float:right;";>' + dataLookup[id][queryData[i]] + '</span></td></tr>';
+                var bullit = document.getElementById('infopanel_bullit' + i);
+                bullit.setAttribute('color', barColors[i]);
+                bullit.setAttribute('visible', true);
+                var firstcolumnstring = 'color:white'.concat('; text: ', varTitleLookup[queryData[i]] + ': ', ';');
+                var firstcolumn = document.getElementById('infopanel_firstcolumn' + i);
+                firstcolumn.setAttribute('bmfont-text', firstcolumnstring);
+                firstcolumn.setAttribute('visible', true);
+                var secondcolumnstring = 'color:white'.concat('; align:right; width:150; text: ', dataLookup[id][queryData[i]], ';');
+                var secondcolumn = document.getElementById('infopanel_secondcolumn' + i);
+                secondcolumn.setAttribute('bmfont-text', secondcolumnstring);
+                secondcolumn.setAttribute('visible', true);
             }
-            str = str + '</table>';
-            districtInfo.innerHTML = str;
             var highlight = document.getElementById('highlight');
             var bar = document.getElementById(id + 0);
             var matrixWorld = bar.object3D.matrixWorld;
@@ -314,13 +327,12 @@
             position.setFromMatrixPosition(matrixWorld);
             position.y = 0.01;
             highlight.setAttribute('position', position);
-            //console.log(varTitleLookup);
         }
     </script>
 </head>
 
 <body>
-  <!--
+    <!--
     <div class="container">
         <div class="row">
             <div id="intro" class="twelve columns" style="margin-top: 5%">
@@ -346,59 +358,60 @@
 
         <div class="row">
             <div id="sceneholder" class="twelve columns" style="margin-top: 5%">-->
-                <a-scene  id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
-                    <a-assets>
-                        <img id="checked" src="js/checked.jpg">
-                        <img id="unchecked" src="js/unchecked.jpg">
-                        <img id="OK" src="img/OK.png">
-                        <img id="clear" src="img/clear.png">
-                        <img id="owndata" src="img/owndata.png">
-                        <div id="target">
-                            <h1>CityViewR</h1>
-                            <span id="pre">Amsterdam</span>
-                            <div id="districtInfo"> </div>
-                        </div>
-                        <div id="selectioninfo">
-                            <h1>Selected  variables</h1>
-                            <span id="CBS">CBS data</span>
-                            <div id="CBSinfo"> </div>
-                        </div>
-                    </a-assets>
-                    <a-map width="5.12" height="5.12" pxToWorldRatio="100" position="0 0 -1" rotation="-90 0 0">
-                        <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.01"></a-sphere>
-                    </a-map>
+    <a-scene id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
+        <a-assets>
+            <img id="checked" src="js/checked.jpg">
+            <img id="unchecked" src="js/unchecked.jpg">
+            <img id="OK" src="img/OK.png">
+            <img id="clear" src="img/clear.png">
+            <img id="owndata" src="img/owndata.png">
+            <div id="target">
+                <h1>CityViewR</h1>
+                <span id="pre">Amsterdam</span>
+                <div id="districtInfo"> </div>
+            </div>
+            <div id="selectioninfo">
+                <h1>Selected  variables</h1>
+                <span id="CBS">CBS data</span>
+                <div id="CBSinfo"> </div>
+            </div>
+        </a-assets>
+        <a-map width="5.12" height="5.12" pxToWorldRatio="100" position="0 0 -1" rotation="-90 0 0">
+            <a-sphere id="current-location" color="#00f" position="0 0 0" visible="false" radius="0.01"></a-sphere>
+        </a-map>
 
-                    <a-circle id="highlight" position="0 0.1 20" rotation="-90 0 0" radius="0.12" transparent="true" opacity="0.4" color="lightblue"></a-circle>
+        <a-circle id="highlight" position="0 0.1 20" rotation="-90 0 0" radius="0.12" transparent="true" opacity="0.4" color="lightblue"></a-circle>
 
-                    <a-plane id="selection_panel" color="black" position="-1.5 .7 1" rotation="-30 45 0" width="1.3" height="1" visible="true">
-                    </a-plane>
-                    <a-entity id="selection_screen" geometry="primitive:plane;width:1;height:0.6;" rotation="0 45 0" position="-1.75 1.5 .8" htmltexture="asset: #selectioninfo"></a-entity>
-                    <a-entity rotation="0 45 0" position="-1.75 1.2 .8">
-                        <a-entity id="selection_OK" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='0.3 -0.05 0' action='getdata' material="src:#OK; side:front;"></a-entity>
-                        <a-entity id="selection_clear" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='-0.3 -0.05 0' action='cleardata' material="src:#clear; side:front;"></a-entity>
-                    </a-entity>
-                    <a-entity id="infopanel" geometry="primitive:plane;width:4;height:2;" rotation="0 0 0" position="0 1.5 -4.5" htmltexture="asset: #target"></a-entity>
+        <a-plane id="selection_panel" color="black" position="-1.5 .7 1" rotation="-30 45 0" width="1.3" height="1" visible="true">
+        </a-plane>
+        <!--<a-entity id="selection_screen" geometry="primitive:plane;width:1;height:0.6;" rotation="0 45 0" position="-1.75 1.5 .8" htmltexture="asset: #selectioninfo"></a-entity>-->
+        <a-plane id="selection_screen" width="1" height="0.6" color="black" rotation="0 45 0" position="-1.75 1.5 .8"></a-plane>
+        <a-entity rotation="0 45 0" position="-1.75 1.2 .8">
+            <a-entity id="selection_OK" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='0.3 -0.05 0' action='getdata' material="src:#OK; side:front;"></a-entity>
+            <a-entity id="selection_clear" geometry="primitive:box;width:0.2;height:0.1;depth:0.02;color:black;" position='-0.3 -0.05 0' action='cleardata' material="src:#clear; side:front;"></a-entity>
+        </a-entity>
+        <!--<a-entity id="infopanel" geometry="primitive:plane;width:4;height:2;" rotation="0 0 0" position="0 1.5 -4.5" htmltexture="asset: #target"></a-entity>-->
+        <a-plane id="infopanel" width="4" height="2" color="black" rotation="0 0 0" position="0 1.5 -4.5"></a-plane>
+        <a-light position="-1 5 0"></a-light>
+        <a-light type="point" position="1 1 -0.37" intensity=".5"></a-light>
+        <a-light type="point" position="0 2 -1.7" intensity=".5"></a-light>
+        <a-light type="point" position="0 2 1.7" intensity=".5"></a-light>
+        <a-light type="ambient" intensity=".4"></a-light>
 
-                    <a-light position="-1 5 0"></a-light>
-                    <a-light type="point" position="1 1 -0.37" intensity=".5"></a-light>
-                    <a-light type="point" position="0 2 -1.7" intensity=".5"></a-light>
-                    <a-light type="point" position="0 2 1.7" intensity=".5"></a-light>
-                    <a-light type="ambient" intensity=".4"></a-light>
-
-                    <!--<a-sky color="#fff"></a-sky>-->
-                    <a-entity id="sky" geometry="primitive: sphere; radius: 50;" material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
-                    <script>
-                        if (!AFRAME.utils.isMobile() && AFRAME.utils.checkHeadsetConnected()) {
-                            document.write('<a-entity position="0 0 1"><a-camera></a-camera></a-entity><a-entity vive-controls="hand: left" vive-cursor></a-entity><a-entity vive-controls="hand: right" vive-cursor></a-entity>');
-                        } else {
-                            document.write('<a-entity position="0 0 1"><a-camera look-controls wasd-controls><a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="1500"></a-cursor></a-camera></a-entity>');
-                        }
-                    </script>
-                    <!--
+        <!--<a-sky color="#fff"></a-sky>-->
+        <a-entity id="sky" geometry="primitive: sphere; radius: 50;" material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
+        <script>
+            if (!AFRAME.utils.isMobile() && AFRAME.utils.checkHeadsetConnected()) {
+                document.write('<a-entity position="0 0 1"><a-camera></a-camera></a-entity><a-entity vive-controls="hand: left" vive-cursor></a-entity><a-entity vive-controls="hand: right" vive-cursor></a-entity>');
+            } else {
+                document.write('<a-entity position="0 0 1"><a-camera look-controls wasd-controls><a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="1500"></a-cursor></a-camera></a-entity>');
+            }
+        </script>
+        <!--
 <a-entity  position = "0 1 0 "  instancing="count:4000"></a-entity>-->
-                    <a-entity id='dataset' position="0 0 -1" rotation="-90 0 0" visible="false"></a-entity>
-                </a-scene>
-          <!--  </div>
+        <a-entity id='dataset' position="0 0 -1" rotation="-90 0 0" visible="false"></a-entity>
+    </a-scene>
+    <!--  </div>
         </div>
         <div class="row">
           <div id= "footer" class="twelve columns" style="margin-top: 5%">

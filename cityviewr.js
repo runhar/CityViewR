@@ -1,7 +1,7 @@
 var mapEl = document.querySelector('a-map');
 var currentLocationEl = document.querySelector('#current-location');
 var setProperty = window.AFRAME.utils.entity.setComponentProperty;
-var queryData = ['Marokko_19','NederlandseAntillenEnAruba_20','Suriname_21','Turkije_22','OverigNietWesters_23'];
+var queryData = ['Marokko_19', 'NederlandseAntillenEnAruba_20', 'Suriname_21', 'Turkije_22', 'OverigNietWesters_23'];
 var menuHeaderColors = ['#393939', '#FF5A09', '#F3843E', '#FF9900', '#6E6E6E'];
 
 //http://opendata.cbs.nl/ODataApi/odata/83220NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten,Marokko_19,NederlandseAntillenEnAruba_20,Suriname_21,Turkije_22,OverigNietWesters_23
@@ -45,27 +45,27 @@ function fillMenuButton(vartext, id, number, type, key) {
     var buttonpanel = document.getElementById('menupanel' + number);
     var buttonselect = document.getElementById('menuselect' + number);
     var menuHeaderColor = number;
-    if (menuHeaderColor > 4){
-      menuHeaderColor = 4;
+    if (menuHeaderColor > 4) {
+        menuHeaderColor = 4;
     }
-    if (type == 'Topic'){
-      vartext = '- ' + vartext;
-      buttonselect.setAttribute('visible', true);
-      buttonselect.setAttribute('selectvar', id);
-      buttonselect.setAttribute('submenu', 'noAction');
-      buttonpanel.setAttribute('submenu', 'noAction');
-      buttonpanel.setAttribute('selectvar', id);
-      console.log(key);
-      console.log(queryData);
-      console.log(queryData.indexOf(key));
-      if (cart.indexOf(key) > -1){
-        buttonselect.setAttribute('material', 'src: #checked;side:double;');
-      } else {
-        buttonselect.setAttribute('material', 'src: #unchecked;side:double;');
-      }
+    if (type == 'Topic') {
+        vartext = '- ' + vartext;
+        buttonselect.setAttribute('visible', true);
+        buttonselect.setAttribute('selectvar', id);
+        buttonselect.setAttribute('submenu', 'noAction');
+        buttonpanel.setAttribute('submenu', 'noAction');
+        buttonpanel.setAttribute('selectvar', id);
+        console.log(key);
+        console.log(queryData);
+        console.log(queryData.indexOf(key));
+        if (cart.indexOf(key) > -1) {
+            buttonselect.setAttribute('material', 'src: #checked;side:double;');
+        } else {
+            buttonselect.setAttribute('material', 'src: #unchecked;side:double;');
+        }
     } else {
-      buttonselect.setAttribute('visible', false);
-      buttonpanel.setAttribute('submenu', id);
+        buttonselect.setAttribute('visible', false);
+        buttonpanel.setAttribute('submenu', id);
     }
     var str = 'color:white'.concat('; text: ', vartext.replace(';', '-'), ';');
     buttontext.setAttribute('bmfont-text', str);
@@ -74,10 +74,10 @@ function fillMenuButton(vartext, id, number, type, key) {
     if (type == 'TopicGroup') {
         buttonpanel.setAttribute('opacity', .8);
         buttonpanel.setAttribute('color', 'lightslategray');
-    } else if (type == 'Parent'){
-      buttonpanel.setAttribute('opacity', .8);
-      buttonpanel.setAttribute('color', menuHeaderColors[menuHeaderColor]);
-      //buttonpanel.setAttribute('color', 'purple');
+    } else if (type == 'Parent') {
+        buttonpanel.setAttribute('opacity', .8);
+        buttonpanel.setAttribute('color', menuHeaderColors[menuHeaderColor]);
+        //buttonpanel.setAttribute('color', 'purple');
     } else {
         buttonpanel.setAttribute('opacity', 0);
         buttonpanel.setAttribute('color', 'gray');
@@ -107,11 +107,11 @@ function addVarButton(vartext, classname, id, count) {
     menuPanel.setAttribute('width', '3');
     menuPanel.setAttribute('height', '0.2');
     menuPanel.setAttribute('opacity', '0.8');
-    if (count == 0){
-      menuPanel.setAttribute('color', menuHeaderColors[0]);
+    if (count == 0) {
+        menuPanel.setAttribute('color', menuHeaderColors[0]);
     } else {
-    menuPanel.setAttribute('color', 'lightslategray');
-  }
+        menuPanel.setAttribute('color', 'lightslategray');
+    }
     menuPanel.setAttribute('position', "1.4 0.08 -0.01");
     menuPanel.setAttribute('submenu', id);
     var menuSelect = document.createElement('a-entity');
@@ -226,6 +226,10 @@ function get_CBS_varnames() {
 
 function get_CBS_data() {
     //Get data for items in cart
+    var infoelements = document.getElementsByClassName('infopanel_element');
+    for (var i = 0; i < infoelements.length; i++) {
+        infoelements[i].setAttribute('visible', false);
+    }
     querystring = cart.join();
     queryData = querystring.split(',');
     var xhr = new XMLHttpRequest();
@@ -233,15 +237,17 @@ function get_CBS_data() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             console.log(JSON.parse(xhr.responseText));
             var data = JSON.parse(xhr.responseText);
-            var max = Object.keys(data).reduce(function(m, k){ return data[k] > m ? data[k] : m }, -Infinity);
+            var max = Object.keys(data).reduce(function(m, k) {
+                return data[k] > m ? data[k] : m
+            }, -Infinity);
             barsSet = setBars(data.value, max);
-            }
-
         }
 
-        //console.log("http://opendata.cbs.nl/ODataApi/odata/83220NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring);
-        xhr.open('GET', "https://opendata.cbs.nl/ODataApi/odata/83487NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring, true);
-        xhr.send(null);
+    }
+
+    //console.log("http://opendata.cbs.nl/ODataApi/odata/83220NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring);
+    xhr.open('GET', "https://opendata.cbs.nl/ODataApi/odata/83487NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring, true);
+    xhr.send(null);
 }
 
 
@@ -288,54 +294,60 @@ function onLocationUpdate(lat, long, width, height) {
         //load default data
         loadJSON('data/default_data.json', function(response) {
             var data = JSON.parse(response);
-            var max = Object.keys(data).reduce(function(m, k){ return data[k] > m ? data[k] : m }, -Infinity);
+            var max = Object.keys(data).reduce(function(m, k) {
+                return data[k] > m ? data[k] : m
+            }, -Infinity);
             barsSet = setBars(data.value, queryData, max);
-          });
+        });
     });
 }
 
-function setBars(data, max){
+function setBars(data, max) {
     var bars = document.getElementsByClassName('bar');
-    for (var i=0; i<bars.length;i++){
-      bars[i].setAttribute('visible',false);
+    for (var i = 0; i < bars.length; i++) {
+        bars[i].setAttribute('visible', false);
     }
     dataLookup = {};
     console.log(queryData);
     for (var i = 0, len = data.length; i < len; i++) {
-      var district = data[i]['WijkenEnBuurten'].trim();
+        var district = data[i]['WijkenEnBuurten'].trim();
         dataLookup[district] = data[i];
     }
-  nrOfItems = Object.keys(data[0]).length;
-  var barColors = chroma.scale('YlOrBr').colors(nrOfItems-1);
-  var vals = Object.keys(data).map(function(key) {
-		return data[key];
-	});
-  var heights = [];
-  var barData = [];
-  for (var i=0; i<data.length;i++) {
-		var wk = vals[i]['WijkenEnBuurten'];
-		for (var j=1; j<nrOfItems;j++) {
-      var barNr = j-1;
-			var val = vals[i][queryData[barNr]];
-      var color = barColors[barNr];
-			heights.push(val);
-			barData.push({"district":wk.trim()+barNr,"value":val, 'color':color});
-		}
-	}
-  var maxBarValue = Math.max.apply(Math, heights);
-  var allBars = document.getElementsByClassName('bar');
-  for (var i=0; i<barData.length;i++){
-    var bar = document.getElementById(barData[i]['district']);
-    var height = barData[i]['value'];
-    var position = new THREE.Vector3();
-		position.setFromMatrixPosition(bar.object3D.matrixWorld);
-    //position.y = (height/maxBarValue)/2;
-    //bar.setAttribute('position', {position[x], position[y], z});
-    //bar.object3D.position.set(position.x, position.y, position.z);
-    bar.setAttribute('height', (height/maxBarValue)*1);
-    bar.setAttribute('color', barData[i]['color']);
-    bar.setAttribute('visible', true);
-  }
+    nrOfItems = Object.keys(data[0]).length;
+    var barColors = chroma.scale('YlOrBr').colors(nrOfItems - 1);
+    var vals = Object.keys(data).map(function(key) {
+        return data[key];
+    });
+    var heights = [];
+    var barData = [];
+    for (var i = 0; i < data.length; i++) {
+        var wk = vals[i]['WijkenEnBuurten'];
+        for (var j = 1; j < nrOfItems; j++) {
+            var barNr = j - 1;
+            var val = vals[i][queryData[barNr]];
+            var color = barColors[barNr];
+            heights.push(val);
+            barData.push({
+                "district": wk.trim() + barNr,
+                "value": val,
+                'color': color
+            });
+        }
+    }
+    var maxBarValue = Math.max.apply(Math, heights);
+    var allBars = document.getElementsByClassName('bar');
+    for (var i = 0; i < barData.length; i++) {
+        var bar = document.getElementById(barData[i]['district']);
+        var height = barData[i]['value'];
+        var position = new THREE.Vector3();
+        position.setFromMatrixPosition(bar.object3D.matrixWorld);
+        //position.y = (height/maxBarValue)/2;
+        //bar.setAttribute('position', {position[x], position[y], z});
+        //bar.object3D.position.set(position.x, position.y, position.z);
+        bar.setAttribute('height', (height / maxBarValue) * 1);
+        bar.setAttribute('color', barData[i]['color']);
+        bar.setAttribute('visible', true);
+    }
 }
 
 function create_extra_markers(position, id) {
@@ -372,31 +384,85 @@ function create_extra_markers(position, id) {
     return extra_markers;
 }
 
-function addViveControls(){
-  var scene = document.getElementById("scene");
-  var leftcontrol = document.createElement('a-entity');
-  var rightcontrol = document.createElement('a-entity');
-  leftcontrol.setAttribute('vive-controls',"hand: left");
-  rightcontrol.setAttribute('vive-controls',"hand: right");
-  scene.appendChild(leftcontrol);
-  scene.appendChild(rightcontrol);
-  var cursor = document.getElementById('cursor');
-  cursor.setAttribute('fuse', false);
+function createInfoScreen(screenID, strheader, strsubheader) {
+    var screen = document.getElementById(screenID);
+    var screenwidth = screen.getAttribute('width');
+    var screenheight = screen.getAttribute('height');
+    var scale = screenwidth / 4;
+    var header = document.createElement('a-entity');
+    header.setAttribute('id', screenID + '_header');
+    header.setAttribute('width', screenwidth);
+    header.setAttribute('height', screenheight * 0.1);
+    header.setAttribute('scale', scale + " " + scale + " " + scale)
+    header.setAttribute('position', "-" + ((screenwidth / 2) - 0.1) + " " + (0.4 * screenheight) + " 0.01");
+    var str = 'color:white'.concat('; text: ', strheader, ';');
+    header.setAttribute('bmfont-text', str);
+    screen.appendChild(header);
+    var subheader = document.createElement('a-entity');
+    subheader.setAttribute('id', screenID + '_subheader');
+    subheader.setAttribute('width', screenwidth);
+    subheader.setAttribute('height', screenheight * 0.1);
+    subheader.setAttribute('scale', scale + " " + scale + " " + scale)
+    subheader.setAttribute('position', "-" + ((screenwidth / 2) - 0.1) + " " + (0.3 * screenheight) + " 0.01");
+    var substr = 'color:white'.concat('; text: ', strsubheader, ';');
+    subheader.setAttribute('bmfont-text', substr);
+    screen.appendChild(subheader);
+    for (var i = 0; i < 7; i++) {
+        var bullit = document.createElement('a-plane');
+        bullit.setAttribute('id', screenID + '_bullit' + i);
+        bullit.setAttribute('class', screenID + '_element');
+        bullit.setAttribute('width', 0.05 * screenheight);
+        bullit.setAttribute('height', 0.05 * screenheight);
+        bullit.setAttribute('color', 'red');
+        bullit.setAttribute('position', "-" + ((0.5 * screenwidth) - (0.1 * screenheight)) + " " + (((0.2 * screenheight) - i * 0.1 * screenheight) + (screenheight / 40)) + " 0.01");
+        screen.appendChild(bullit);
+        var firstColumn = document.createElement('a-entity');
+        firstColumn.setAttribute('id', screenID + '_firstcolumn' + i);
+        firstColumn.setAttribute('class', screenID + '_element');
+        firstColumn.setAttribute('width', screenwidth / 2);
+        firstColumn.setAttribute('height', screenheight * 0.1);
+        firstColumn.setAttribute('scale', scale + " " + scale + " " + scale)
+        firstColumn.setAttribute('position', "-" + (0.4 * screenwidth) + " " + ((0.2 * screenheight) - i * 0.1 * screenheight) + " 0.01");
+        var linestr = 'color:white'.concat('; text: ', 'Amsterdam' + i, ';');
+        firstColumn.setAttribute('bmfont-text', linestr);
+        screen.appendChild(firstColumn);
+        var secondColumn = document.createElement('a-entity');
+        secondColumn.setAttribute('id', screenID + '_secondcolumn' + i);
+        secondColumn.setAttribute('class', screenID + '_element');
+        secondColumn.setAttribute('width', screenwidth / 2);
+        secondColumn.setAttribute('height', screenheight * 0.1);
+        secondColumn.setAttribute('scale', scale + " " + scale + " " + scale)
+        secondColumn.setAttribute('position', (0.3 * screenwidth) + " " + ((0.2 * screenheight) - i * 0.1 * screenheight) + " 0.01");
+        var secondstr = 'color:white'.concat('; align:right; width:150; text: ', '1500' + i, ';');
+        secondColumn.setAttribute('bmfont-text', secondstr);
+        screen.appendChild(secondColumn);
+    }
+    var elements = document.getElementsByClassName(screenID + '_element');
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].setAttribute('visible', false);
+    }
 }
 
-function readTextFile(file)
-{
+function addViveControls() {
+    var scene = document.getElementById("scene");
+    var leftcontrol = document.createElement('a-entity');
+    var rightcontrol = document.createElement('a-entity');
+    leftcontrol.setAttribute('vive-controls', "hand: left");
+    rightcontrol.setAttribute('vive-controls', "hand: right");
+    scene.appendChild(leftcontrol);
+    scene.appendChild(rightcontrol);
+    var cursor = document.getElementById('cursor');
+    cursor.setAttribute('fuse', false);
+}
+
+function readTextFile(file) {
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file, true);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4) {
+            if (rawFile.status === 200 || rawFile.status == 0) {
                 var allText = rawFile.responseText;
-                console.log(allText);
-                 lines = processData(allText);
+                lines = processData(allText);
 
 
             }
@@ -412,85 +478,87 @@ function processData(csv) {
     var lines = [];
     var worldpoints = [];
     var colors = [];
-    var colorscale = chroma.scale(['green','red']);
+    var colorscale = chroma.scale(['green', 'red']);
     while (allTextLines.length) {
         lines.push(allTextLines.shift().split(';'));
     }
     var maxvalue = -Infinity;
-    for (var i=1;i<lines.length;i++){
-      if (lines[i][2] > maxvalue){
-        maxvalue = lines[i][2];
-      }
+    for (var i = 1; i < lines.length; i++) {
+        if (lines[i][2] > maxvalue) {
+            maxvalue = lines[i][2];
+        }
     }
-	for (var i=1;i<lines.length;i++){
-    if (lines[i][0] != undefined && lines[i][1] != undefined){
-    var lnglat = mapEl.components.map.project(lines[i][0], lines[i][1]);
-  }
-    lnglat.z = parseFloat(lines[i][2])/maxvalue;
-    var color = colorscale(lnglat.z);
-    color = chroma(color).gl();
-    colors.push(color);
-    lnglat.z = lnglat.z + 0.5;
-    worldpoints.push(lnglat);
-  }
-	console.log(worldpoints);
-  otherdata = worldpoints;
-  createDataSetPoints(otherdata, colors);
-  return worldpoints;
+    for (var i = 1; i < lines.length; i++) {
+        if (lines[i][0] != undefined && lines[i][1] != undefined) {
+            var lnglat = mapEl.components.map.project(lines[i][0], lines[i][1]);
+        }
+        lnglat.z = parseFloat(lines[i][2]) / maxvalue;
+        var color = colorscale(lnglat.z);
+        color = chroma(color).gl();
+        colors.push(color);
+        lnglat.z = lnglat.z + 0.5;
+        worldpoints.push(lnglat);
+    }
+    console.log(worldpoints);
+    otherdata = worldpoints;
+    createDataSetPoints(otherdata, colors);
+    return worldpoints;
 
 }
 
-function createDataSetPoints(data, colors){
-  var el = document.getElementById('dataset');
+function createDataSetPoints(data, colors) {
+    var el = document.getElementById('dataset');
 
-  var count = data.length;
+    var count = data.length;
 
-  var geometry = new THREE.InstancedBufferGeometry();
-  geometry.copy(new THREE.SphereBufferGeometry(.006));
+    var geometry = new THREE.InstancedBufferGeometry();
+    geometry.copy(new THREE.SphereBufferGeometry(.006));
 
-  var translateArray = new Float32Array(count*3);
-  var vectorArray = new Float32Array(count*3);
-  var colorArray = new Float32Array(count*3);
+    var translateArray = new Float32Array(count * 3);
+    var vectorArray = new Float32Array(count * 3);
+    var colorArray = new Float32Array(count * 3);
 
-  for (var i = 0; i < count; i++) {
-    translateArray[i*3+0] = data[i].x;
-    translateArray[i*3+1] = data[i].y;
-    translateArray[i*3+2] = data[i].z;
-  }
+    for (var i = 0; i < count; i++) {
+        translateArray[i * 3 + 0] = data[i].x;
+        translateArray[i * 3 + 1] = data[i].y;
+        translateArray[i * 3 + 2] = data[i].z;
+    }
 
-  for (var i = 0; i < count; i++) {
-    colorArray[i*3+0] = colors[i][0];
-    colorArray[i*3+1] = colors[i][1];
-    colorArray[i*3+2] = colors[i][2];
-  }
+    for (var i = 0; i < count; i++) {
+        colorArray[i * 3 + 0] = colors[i][0];
+        colorArray[i * 3 + 1] = colors[i][1];
+        colorArray[i * 3 + 2] = colors[i][2];
+    }
 
-  geometry.addAttribute('translate', new THREE.InstancedBufferAttribute(translateArray, 3, 1));
-  geometry.addAttribute('color', new THREE.InstancedBufferAttribute(colorArray, 3, 1));
+    geometry.addAttribute('translate', new THREE.InstancedBufferAttribute(translateArray, 3, 1));
+    geometry.addAttribute('color', new THREE.InstancedBufferAttribute(colorArray, 3, 1));
 
-  var material = new THREE.ShaderMaterial({
-    uniforms: {
-      time: {value: 0}
-    },
-    vertexShader: [
-      'attribute vec3 translate;',
-      'attribute vec3 color;',
-      'uniform float time;',
-      'varying vec3 vColor;',
-      'void main() {',
-      '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position + translate, 1.0 );',
-      '  vColor = color;',
-'}'
-    ].join('\n'),
-    fragmentShader: [
-      'varying vec3 vColor;',
-      'void main() {',
-      '  gl_FragColor = vec4( vColor, 1.0 );',
-      '}'
-    ].join('\n')
-  });
-  var mesh = new THREE.Mesh(geometry, material);
-  el.setObject3D('mesh', mesh);
-//  el.emit('model-loaded', {format:'mesh', model: mesh});
+    var material = new THREE.ShaderMaterial({
+        uniforms: {
+            time: {
+                value: 0
+            }
+        },
+        vertexShader: [
+            'attribute vec3 translate;',
+            'attribute vec3 color;',
+            'uniform float time;',
+            'varying vec3 vColor;',
+            'void main() {',
+            '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position + translate, 1.0 );',
+            '  vColor = color;',
+            '}'
+        ].join('\n'),
+        fragmentShader: [
+            'varying vec3 vColor;',
+            'void main() {',
+            '  gl_FragColor = vec4( vColor, 1.0 );',
+            '}'
+        ].join('\n')
+    });
+    var mesh = new THREE.Mesh(geometry, material);
+    el.setObject3D('mesh', mesh);
+    //  el.emit('model-loaded', {format:'mesh', model: mesh});
 }
 
 //------------START------------------------------------------------------------
@@ -499,6 +567,8 @@ function createDataSetPoints(data, colors){
 //  addViveControls();
 //}
 var menu = get_CBS_varnames();
+createInfoScreen('infopanel', 'CityViewR', 'Amsterdam');
+createInfoScreen('selection_screen', 'Selected variables', 'CBS data');
 
 
 
