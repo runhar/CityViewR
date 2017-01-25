@@ -18,6 +18,8 @@ Data are read from a csv file containing latitude, longitude and values.
 Best viewed with HTC Vive in the experimental Chromium VR browser. Other configurations fail sometimes. Reloading the page helps sometime.
 Remember, this is still very experimental stuff.
 
+![Alt text](/img/screenshot.png?raw=true "CityViewR")
+
 ## What's next?
 This is a prototype. CityViewR can easily be extended to cover all Dutch municipalities, and probably many other cities.
 Prerequisities at the moment are that there needs to be some GEOJSON information available to map the data, and of course a data API.
