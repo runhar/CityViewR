@@ -4,9 +4,6 @@ var setProperty = window.AFRAME.utils.entity.setComponentProperty;
 var queryData = ['Marokko_19', 'NederlandseAntillenEnAruba_20', 'Suriname_21', 'Turkije_22', 'OverigNietWesters_23'];
 var menuHeaderColors = ['#393939', '#FF5A09', '#F3843E', '#FF9900', '#6E6E6E'];
 
-//http://opendata.cbs.nl/ODataApi/odata/83220NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten,Marokko_19,NederlandseAntillenEnAruba_20,Suriname_21,Turkije_22,OverigNietWesters_23
-//max = Object.keys(obj).reduce(function(m, k){ return obj[k] > m ? obj[k] : m }, -Infinity);
-
 //helper function to find index of item in array
 function findWithAttr(array, attr, value) {
     for (var i = 0; i < array.length; i += 1) {
@@ -44,6 +41,7 @@ function fillMenuButton(vartext, id, number, type, key) {
     var buttontext = document.getElementById('menutext' + number);
     var buttonpanel = document.getElementById('menupanel' + number);
     var buttonselect = document.getElementById('menuselect' + number);
+    buttonpanel.setAttribute('selecthover', id);
     var menuHeaderColor = number;
     if (menuHeaderColor > 4) {
         menuHeaderColor = 4;
@@ -55,9 +53,6 @@ function fillMenuButton(vartext, id, number, type, key) {
         buttonselect.setAttribute('submenu', 'noAction');
         buttonpanel.setAttribute('submenu', 'noAction');
         buttonpanel.setAttribute('selectvar', id);
-        console.log(key);
-        console.log(queryData);
-        console.log(queryData.indexOf(key));
         if (cart.indexOf(key) > -1) {
             buttonselect.setAttribute('material', 'src: #checked;side:double;');
         } else {
@@ -70,14 +65,12 @@ function fillMenuButton(vartext, id, number, type, key) {
     var str = 'color:white'.concat('; text: ', vartext.replace(';', '-'), ';');
     buttontext.setAttribute('bmfont-text', str);
     buttontext.setAttribute('visible', true);
-    //buttonpanel.setAttribute('submenu', id);
     if (type == 'TopicGroup') {
         buttonpanel.setAttribute('opacity', .8);
         buttonpanel.setAttribute('color', 'lightslategray');
     } else if (type == 'Parent') {
         buttonpanel.setAttribute('opacity', .8);
         buttonpanel.setAttribute('color', menuHeaderColors[menuHeaderColor]);
-        //buttonpanel.setAttribute('color', 'purple');
     } else {
         buttonpanel.setAttribute('opacity', 0);
         buttonpanel.setAttribute('color', 'gray');
@@ -97,7 +90,6 @@ function addVarButton(vartext, classname, id, count) {
     button.setAttribute('visible', true);
     var posx = -0.6;
     var cnt = count;
-    console.log(cnt);
     var posy = 0.4 - (cnt / 12);
     var position = posx + " " + posy + " 0.01";
     button.setAttribute('position', position);
@@ -118,14 +110,19 @@ function addVarButton(vartext, classname, id, count) {
     menuSelect.setAttribute('geometry', 'primitive: plane; width:0.15;height:0.15;');
     menuSelect.setAttribute('class', 'menuselect');
     menuSelect.setAttribute('id', 'menuselect' + count);
-    //menuSelect.setAttribute('width', '0.15');
-    //menuSelect.setAttribute('height', '0.15');
     menuSelect.setAttribute('color', 'black');
     menuSelect.setAttribute('position', "-1.4 0 0.02");
     menuSelect.setAttribute('material', 'src:#unchecked');
     menuSelect.setAttribute('selectvar', id);
     menuSelect.setAttribute('visible', false);
     menuPanel.appendChild(menuSelect);
+    var menuHover = document.createElement('a-entity');
+    menuHover.setAttribute('geometry', 'primitive: plane; width:0.02;height:0.15;color:white');
+    menuHover.setAttribute('class', 'menuhover');
+    menuHover.setAttribute('id', 'menupanel' + count + 'hover');
+    menuHover.setAttribute('position', "1.6 0 0.03");
+    menuHover.setAttribute('visible', false);
+    menuPanel.appendChild(menuHover);
     button.appendChild(menuPanel);
     selection_panel.appendChild(button);
     return button;
@@ -156,8 +153,6 @@ function addOwnDataButton(vartext) {
     menuSelect.setAttribute('geometry', 'primitive: plane; width:0.15;height:0.15;');
     menuSelect.setAttribute('class', 'owndataselect');
     menuSelect.setAttribute('id', 'owndataselect');
-    //menuSelect.setAttribute('width', '0.15');
-    //menuSelect.setAttribute('height', '0.15');
     menuSelect.setAttribute('color', 'black');
     menuSelect.setAttribute('position', "-1.6 0 0.02");
     menuSelect.setAttribute('material', 'src:#unchecked');
@@ -182,7 +177,6 @@ function get_CBS_varnames() {
                 menuLookup[variables[i].ID] = variables[i];
                 varTitleLookup[variables[i].Key] = variables[i].Title;
             }
-            //create array where categories have children instead of a parent
             variables = variables.reduce(function(map, node) {
                 map.i[node.ID] = node;
                 node.children = [];
@@ -208,17 +202,13 @@ function get_CBS_varnames() {
             CBSdata.Type = 'TopicGroup';
             CBSdata.children = variables;
             menuData[0] = CBSdata;
-            console.log(menuData);
-
             button = addVarButton(menuData[0].Title, 'CBStopcat', menuData[0].ID, 0);
             menuLookup[999] = menuData[0];
             for (var i = 0; i < menuData[0]['children'].length; i++) {
                 button = addVarButton(menuData[0]['children'][i].Title, 'CBStopcat', menuData[0]['children'][i].ID, i + 1);
             }
             var owndatabutton = addOwnDataButton('Own data: EnergyPerformance.csv');
-
         }
-
     }
     xhr.open('GET', 'https://opendata.cbs.nl/ODataApi/odata/83487NED/DataProperties', true);
     xhr.send(null);
@@ -242,10 +232,7 @@ function get_CBS_data() {
             }, -Infinity);
             barsSet = setBars(data.value, max);
         }
-
     }
-
-    //console.log("http://opendata.cbs.nl/ODataApi/odata/83220NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring);
     xhr.open('GET', "https://opendata.cbs.nl/ODataApi/odata/83487NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring, true);
     xhr.send(null);
 }
@@ -287,7 +274,6 @@ function onLocationUpdate(lat, long, width, height) {
             } else {
                 setProperty(district.marker, 'visible', true);
             }
-            //setProperty(district.marker, 'id', district.id+0);
             setProperty(district.marker, 'position', position);
             extra_markers = create_extra_markers(position, district.id);
         });
@@ -341,9 +327,6 @@ function setBars(data, max) {
         var height = barData[i]['value'];
         var position = new THREE.Vector3();
         position.setFromMatrixPosition(bar.object3D.matrixWorld);
-        //position.y = (height/maxBarValue)/2;
-        //bar.setAttribute('position', {position[x], position[y], z});
-        //bar.object3D.position.set(position.x, position.y, position.z);
         bar.setAttribute('height', (height / maxBarValue) * 1);
         bar.setAttribute('color', barData[i]['color']);
         bar.setAttribute('visible', true);
@@ -442,7 +425,7 @@ function createInfoScreen(screenID, strheader, strsubheader) {
         elements[i].setAttribute('visible', false);
     }
 }
-
+/*
 function addViveControls() {
     var scene = document.getElementById("scene");
     var leftcontrol = document.createElement('a-entity');
@@ -454,7 +437,7 @@ function addViveControls() {
     var cursor = document.getElementById('cursor');
     cursor.setAttribute('fuse', false);
 }
-
+*/
 function readTextFile(file) {
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file, true);
@@ -463,8 +446,6 @@ function readTextFile(file) {
             if (rawFile.status === 200 || rawFile.status == 0) {
                 var allText = rawFile.responseText;
                 lines = processData(allText);
-
-
             }
         }
     }
@@ -473,7 +454,6 @@ function readTextFile(file) {
 
 
 function processData(csv) {
-    //var newcsv = csv.replace(/,/g, '.')//dutch csv files have comma instead of dot
     var allTextLines = csv.split(/\r\n|\n/);
     var lines = [];
     var worldpoints = [];
@@ -499,40 +479,31 @@ function processData(csv) {
         lnglat.z = lnglat.z + 0.5;
         worldpoints.push(lnglat);
     }
-    console.log(worldpoints);
     otherdata = worldpoints;
     createDataSetPoints(otherdata, colors);
     return worldpoints;
-
 }
 
 function createDataSetPoints(data, colors) {
     var el = document.getElementById('dataset');
-
     var count = data.length;
-
     var geometry = new THREE.InstancedBufferGeometry();
     geometry.copy(new THREE.SphereBufferGeometry(.006));
-
     var translateArray = new Float32Array(count * 3);
     var vectorArray = new Float32Array(count * 3);
     var colorArray = new Float32Array(count * 3);
-
     for (var i = 0; i < count; i++) {
         translateArray[i * 3 + 0] = data[i].x;
         translateArray[i * 3 + 1] = data[i].y;
         translateArray[i * 3 + 2] = data[i].z;
     }
-
     for (var i = 0; i < count; i++) {
         colorArray[i * 3 + 0] = colors[i][0];
         colorArray[i * 3 + 1] = colors[i][1];
         colorArray[i * 3 + 2] = colors[i][2];
     }
-
     geometry.addAttribute('translate', new THREE.InstancedBufferAttribute(translateArray, 3, 1));
     geometry.addAttribute('color', new THREE.InstancedBufferAttribute(colorArray, 3, 1));
-
     var material = new THREE.ShaderMaterial({
         uniforms: {
             time: {
@@ -558,22 +529,15 @@ function createDataSetPoints(data, colors) {
     });
     var mesh = new THREE.Mesh(geometry, material);
     el.setObject3D('mesh', mesh);
-    //  el.emit('model-loaded', {format:'mesh', model: mesh});
 }
 
 //------------START------------------------------------------------------------
 
-//if (AFRAME.utils.checkHeadsetConnected()){
-//  addViveControls();
-//}
 var menu = get_CBS_varnames();
 createInfoScreen('infopanel', 'CityViewR', 'Amsterdam');
 createInfoScreen('selection_screen', 'Selected variables', 'CBS data');
 
-
-
 // Once the map is loaded
-
 mapEl.addEventListener('map-loaded', function() {
     mapEl.setAttribute('map', 'style', JSON.stringify(style));
     var geomData = mapEl.components.geometry.data;
@@ -589,7 +553,4 @@ mapEl.addEventListener('map-loaded', function() {
     setProperty(currentLocationEl, 'visible', true);
     onLocationUpdate(lat, long, geomData.width, geomData.height);
     var otherdataholder = readTextFile('data/EnergyPerformance.csv');
-
-    //<a-entity  position = "0 1 0 "  instancing="count:4000"></a-entity>
-
 });
