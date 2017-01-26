@@ -204,10 +204,14 @@
             var subheaderstr = 'color:white'.concat('; text: ', 'Amsterdam: ' + districtCache[id]['name'], ';');
             subheader.setAttribute('bmfont-text', subheaderstr);
             for (var i = 0; i < queryData.length; i++) {
+               var varname = varTitleLookup[queryData[i]].replace(';', '-');
+               if (varname.length > 28){
+                varname = varname.substr(0, 27) + "...";
+              }
                 var bullit = document.getElementById('infopanel_bullit' + i);
                 bullit.setAttribute('color', barColors[i]);
                 bullit.setAttribute('visible', true);
-                var firstcolumnstring = 'color:white'.concat('; text: ', varTitleLookup[queryData[i]].replace(';', '-') + ': ', ';');
+                var firstcolumnstring = 'color:white'.concat('; text: ', varname + ': ', ';');
                 var firstcolumn = document.getElementById('infopanel_firstcolumn' + i);
                 firstcolumn.setAttribute('bmfont-text', firstcolumnstring);
                 firstcolumn.setAttribute('visible', true);
