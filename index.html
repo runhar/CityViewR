@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
     <title>CityViewR</title>
+    <style type="text/css">
+            div {
+                width: 80%;
+                margin: 0 auto;
+          }
+        </style>
+
     <script src="js/aframe-map.js"></script>
     <script src="js/aframe-bmfont-text-component.js"></script>
     <script src="js/aframe-vive-cursor-component.min.js"></script>
@@ -232,7 +239,8 @@
 </head>
 
 <body>
-        <a-scene id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
+
+        <a-scene embedded="true" id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
             <a-assets>
                 <img id="checked" src="js/checked.jpg">
                 <img id="unchecked" src="js/unchecked.jpg">
@@ -275,6 +283,40 @@
         <script src="https://npmcdn.com/@turf/turf@3.5.1/turf.min.js" charset="utf-8"></script>
         <script src="style.js"></script>
         <script src="cityviewr.js"></script>
+        <div>
+          <h1>CityViewR: open data for smart cities, in VR</h1>
+          <p> Aimed at decision-makers and data-analists, <b>CityViewR</b> combines the best of the Web and VR.
+          It uses <i>open data</i> to collect low regional statistical data which users can combine with their own data.
+          CityViewR presents these data in an <i>immersive</i> room-scale setting, letting users view these data in new ways.
+          Which hopefully leads to a better insight in social and economical developments in the city, and in turn to
+          more evidence-based policy making. </p>
+          <h2>About the demo</h2>
+          <p>The demo presents data about Amsterdam. This city was mainly chosen because the winner of the Virtuleap Hackathon will earn a spot
+          there (at the little blue dot). Data on city district level ('wijk' in Dutch) come from the OData service of CBS,
+          the Dutch statistical institute. Because data are loaded in real-time, all variable labels are in Dutch. By default, the first view will show the distribution of migrant groups across the city. Clicking on bars will show the statistical
+          figures. Data source: CBS Open data Wijken en buurten 2015.
+          To show that CityViewR can also deal with microdata, we prepared a synthetic dataset derived from an open data source on energy labels.
+          Click 'own data' to view more than 4.000 data points (green correlates with low energy consumption, red with high energy consumption).
+          Data are read from a csv file containing latitude, longitude and values.<br/><br/>
+
+          Best viewed with HTC Vive in the experimental Chromium VR browser. Other configurations fail regularly unfortunately. Reloading the page sometimes helps.
+          Remember, this is still very experimental stuff.</p>
+        </div>
+      <div>
+        <h2>What's next?</h2>
+        <p> This is a prototype. CityViewR can easily be extended to cover all Dutch municipalities, and probably many other cities.
+        Prerequisities at the moment are that there needs to be some GEOJSON information available to map the data, and of course a data API.
+        <br/><br/>
+        On our todo-list:
+        <ul>
+        <li> a generic input procedure for adding own datasets (in R)</li>
+        <li> animation, to see how things develop over time</li>
+        <li> drill down to even more detailed regional information (neighbourhoods)</li>
+        <li> basic data manipulation (create categories, cross variables)</li>
+        <li> grab, zoom and rotate</li>
+        <li> improve code for better maintainability, better user interaction, better performance on mobile devices etc. etc.</li>
+       </p>
+        </ul>
 </body>
 
 </html>
