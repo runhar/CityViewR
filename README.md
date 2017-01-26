@@ -9,7 +9,7 @@ more evidence-based policy making.
 The demo presents data about Amsterdam. This city was mainly chosen because the winner of the Virtuleap Hackathon will earn a spot
 there (at the little blue dot). Data on city district level ('wijk' in Dutch) come from the OData service of CBS,
 the Dutch statistical institute. Because data are loaded in real-time, all variable labels are in Dutch. By default, the first view will show the distribution of migrant groups across the city. Clicking on bars will show the statistical
-figures. Please note that data are from 2016, many of the categories shown don't have actual data yet.
+figures. Data source: CBS Open data Wijken en buurten 2015.
 To show that CityViewR can also deal with microdata, we prepared a synthetic dataset derived from an open data source on energy labels.
 Click 'own data' to view more than 4.000 data points (green correlates with low energy consumption, red with high energy consumption).
 Data are read from a csv file containing latitude, longitude and values.
