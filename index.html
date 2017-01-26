@@ -228,7 +228,6 @@
 </head>
 
 <body>
-    <div id="sceneholder" class="twelve columns" style="margin-top: 5%">-->
         <a-scene id="scene" fog="color: #bc483e; near: 0; far: 25;" antialias='true'>
             <a-assets>
                 <img id="checked" src="js/checked.jpg">
@@ -257,7 +256,7 @@
             <a-entity id="sky" geometry="primitive: sphere; radius: 50;" material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
             <script>
                 if (!AFRAME.utils.isMobile() && AFRAME.utils.checkHeadsetConnected()) {
-                    document.write('<a-entity position="0 0 1"><a-camera></a-camera></a-entity><a-entity vive-controls="hand: left" vive-cursor></a-entity><a-entity vive-controls="hand: right" vive-cursor></a-entity>');
+                    document.write('<a-entity position="0 0 0"><a-camera></a-camera></a-entity><a-entity position="0 0 0" vive-controls="hand: right" vive-cursor></a-entity>');
                 } else {
                     document.write('<a-entity position="0 0 1"><a-camera look-controls wasd-controls><a-cursor id="cursor" color="#4CC3D9" fuse="true" fuseTimeout="1500"></a-cursor></a-camera></a-entity>');
                 }
