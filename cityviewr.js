@@ -210,7 +210,8 @@ function get_CBS_varnames() {
             var owndatabutton = addOwnDataButton('Own data: EnergyPerformance.csv');
         }
     }
-    xhr.open('GET', 'https://opendata.cbs.nl/ODataApi/odata/83487NED/DataProperties', true);
+    //xhr.open('GET', 'https://opendata.cbs.nl/ODataApi/odata/83487NED/DataProperties', true);
+    xhr.open('GET', 'https://opendata.cbs.nl/ODataApi/odata/83220NED/DataProperties', true);
     xhr.send(null);
 }
 
@@ -233,7 +234,8 @@ function get_CBS_data() {
             barsSet = setBars(data.value, max);
         }
     }
-    xhr.open('GET', "https://opendata.cbs.nl/ODataApi/odata/83487NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring, true);
+    //xhr.open('GET', "https://opendata.cbs.nl/ODataApi/odata/83487NED/TypedDataSet?$filter=(substringof('WK0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring, true);
+    xhr.open('GET', "https://opendata.cbs.nl/ODataApi/odata/83220NED/TypedDataSet?$filter=(substringof('BU0363',WijkenEnBuurten))&$select=WijkenEnBuurten," + querystring, true);
     xhr.send(null);
 }
 
@@ -242,18 +244,22 @@ function onLocationUpdate(lat, long, width, height) {
     var halfWidth = width / 2;
     var halfHeight = height / 2;
     // Load demo data from Amsterdam (based on CBS wijken en buurten kaart)
-    loadJSON('geojson/WK_GM0363.geojson', function(response) {
+  /*  loadJSON('geojson/WK_GM0363.geojson', function(response) {
         response = {
             "type": "FeatureCollection",
             "features": JSON.parse(response)
-        };
+        };*/
+        loadJSON('geojson/BU_GM0363_2015.geojson', function(response) {
+            response = JSON.parse(response);
         for (var i = 0; i < response['features'].length; i++) {
             var district = {};
             district.center = turf.center(response['features'][i]['geometry']);
             district.long = district.center['geometry']['coordinates'][0];
             district.lat = district.center['geometry']['coordinates'][1];
-            district.id = response['features'][i]['properties']['WK_CODE'];
-            district.name = response['features'][i]['properties']['WK_NAAM'];
+            //district.id = response['features'][i]['properties']['WK_CODE'];
+            //district.name = response['features'][i]['properties']['WK_NAAM'];
+            district.id = response['features'][i]['properties']['BU_CODE'];
+            district.name = response['features'][i]['properties']['BU_NAAM'];
             district.marker = addMarker({
                 x: 0,
                 y: 0,
@@ -278,7 +284,8 @@ function onLocationUpdate(lat, long, width, height) {
             extra_markers = create_extra_markers(position, district.id);
         });
         //load default data
-        loadJSON('data/default_data.json', function(response) {
+        //loadJSON('data/default_data.json', function(response) {
+        loadJSON('data/default_data_2015.json', function(response) {
             var data = JSON.parse(response);
             var max = Object.keys(data).reduce(function(m, k) {
                 return data[k] > m ? data[k] : m
