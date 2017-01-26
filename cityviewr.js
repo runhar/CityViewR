@@ -96,8 +96,8 @@ function addVarButton(vartext, classname, id, count) {
     var menuPanel = document.createElement('a-plane');
     menuPanel.setAttribute('class', 'menupanel');
     menuPanel.setAttribute('id', 'menupanel' + count);
-    menuPanel.setAttribute('width', '3');
-    menuPanel.setAttribute('height', '0.2');
+    menuPanel.setAttribute('width', '2.98');
+    menuPanel.setAttribute('height', '0.19');
     menuPanel.setAttribute('opacity', '0.8');
     if (count == 0) {
         menuPanel.setAttribute('color', menuHeaderColors[0]);
@@ -117,10 +117,10 @@ function addVarButton(vartext, classname, id, count) {
     menuSelect.setAttribute('visible', false);
     menuPanel.appendChild(menuSelect);
     var menuHover = document.createElement('a-entity');
-    menuHover.setAttribute('geometry', 'primitive: plane; width:0.02;height:0.15;color:white');
+    menuHover.setAttribute('geometry', 'primitive: plane; width:3;height:0.2;color:white');
     menuHover.setAttribute('class', 'menuhover');
     menuHover.setAttribute('id', 'menupanel' + count + 'hover');
-    menuHover.setAttribute('position', "1.6 0 0.03");
+    menuHover.setAttribute('position', "0 0 -0.011");
     menuHover.setAttribute('visible', false);
     menuPanel.appendChild(menuHover);
     button.appendChild(menuPanel);
