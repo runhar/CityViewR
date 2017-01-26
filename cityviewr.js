@@ -540,7 +540,8 @@ function createDataSetPoints(data, colors) {
 
 //------------START------------------------------------------------------------
 
-var menu = get_CBS_varnames();
+//var menu = get_CBS_varnames();
+get_CBS_varnames();
 createInfoScreen('infopanel', 'CityViewR', 'Amsterdam');
 createInfoScreen('selection_screen', 'Selected variables', 'CBS data');
 
